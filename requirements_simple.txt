@@ -1,0 +1,13 @@
+# Requirements simplificados para Render - Máxima compatibilidad
+Flask
+pandas
+openpyxl
+python-docx
+matplotlib
+numpy
+requests
+Werkzeug
+Jinja2
+Pillow
+psutil
+gunicorn

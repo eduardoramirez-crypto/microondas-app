@@ -1,0 +1,2956 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fangio Telecom - Gestión de Enlaces PtMP Profesional</title>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script src="config.js"></script>
+  <style>
+    /* Variables CSS para diseño profesional */
+    :root {
+        --primary-color: #0ea5e9;
+        --primary-gradient: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+        --secondary-color: #8b5cf6;
+        --secondary-gradient: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --info-color: #3b82f6;
+        --dark-bg: #0f172a;
+        --light-bg: #f8fafc;
+        --card-bg: rgba(255, 255, 255, 0.98);
+        --glass-bg: rgba(255, 255, 255, 0.1);
+        --border-radius: 16px;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+        --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Reset y estilos base mejorados */
+    * {
+      margin: 0;
+      padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: var(--light-bg);
+        color: #374151;
+        line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Video de fondo mejorado */
+    .video-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      opacity: 0.6;
+      filter: brightness(0.8) contrast(1.1);
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.4), rgba(30, 41, 59, 0.3));
+      z-index: -1;
+      backdrop-filter: blur(1px);
+    }
+
+    /* Header ultra profesional con efectos avanzados */
+    .header {
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.95), rgba(2, 132, 199, 0.9), rgba(139, 92, 246, 0.8));
+        color: white;
+        padding: 4rem 2rem;
+        box-shadow: 0 20px 60px rgba(14, 165, 233, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px;
+        margin-bottom: 3rem;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .header::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 80%, rgba(14, 165, 233, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1));
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+    }
+
+    .header h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 30px rgba(14, 165, 233, 0.5);
+        letter-spacing: -0.03em;
+        position: relative;
+        z-index: 2;
+        background: linear-gradient(45deg, #ffffff, #f0f9ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .header p {
+        font-size: 1.4rem;
+        opacity: 0.95;
+        font-weight: 500;
+        line-height: 1.6;
+        position: relative;
+        z-index: 2;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .header-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 700;
+        margin-top: 1.5rem;
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 2;
+        transition: all 0.3s ease;
+    }
+
+    .header-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.25));
+    }
+
+    /* Navegación con pestañas modernas */
+    .nav-tabs {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 0.5rem;
+        margin: 2rem;
+        box-shadow: var(--shadow-md);
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-tabs button {
+        background: transparent;
+        border: none;
+        padding: 1rem 1.5rem;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-weight: 600;
+        color: #6b7280;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .nav-tabs button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--primary-gradient);
+        transition: left 0.3s ease;
+      z-index: -1;
+    }
+
+    .nav-tabs button:hover::before {
+        left: 0;
+    }
+
+    .nav-tabs button:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .nav-tabs button.active {
+        background: var(--primary-gradient);
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+
+    .nav-tabs button.active::before {
+        left: 0;
+    }
+
+    /* Contenedor principal con glassmorphism */
+    .container {
+        max-width: 1400px;
+      margin: 0 auto;
+        padding: 2rem;
+    }
+
+    /* Tarjetas con diseño moderno */
+    .card {
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .card h3 {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Botones modernos */
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: var(--border-radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        display: inline-flex;
+      align-items: center;
+        gap: 0.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+        left: 100%;
+    }
+
+    .btn-primary {
+        background: var(--primary-gradient);
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .btn-info {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-info:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Formularios modernos */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e5e7eb;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        transform: translateY(-1px);
+    }
+
+    /* Tabla moderna */
+    .table-container {
+        background: white;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        margin: 2rem 0;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .table-container table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .table-container th,
+    .table-container td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .table-container th {
+        background: var(--primary-gradient);
+        color: white;
+      font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.875rem;
+    }
+    
+    .table-container tr:hover {
+        background: rgba(102, 126, 234, 0.05);
+    }
+
+    table {
+      width: 100%;
+        border-collapse: collapse;
+        background: white;
+    }
+
+    th {
+        background: var(--primary-gradient);
+        color: white;
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    td {
+        padding: 1rem;
+        border-bottom: 1px solid #f3f4f6;
+        transition: background-color 0.2s ease;
+    }
+
+    tr:hover td {
+        background-color: #f8fafc;
+    }
+
+    /* Panel de análisis microondas */
+    .panel-microondas {
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+    }
+
+    .panel-microondas h3 {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+      font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .config-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .resultados-microondas {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .stats-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .stat-item {
+        background: white;
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        text-align: center;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-top: 0.25rem;
+    }
+
+    /* Toast notifications mejoradas */
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .toast {
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        padding: 1rem 1.5rem;
+        box-shadow: var(--shadow-xl);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        animation: slideInRight 0.3s ease;
+        max-width: 400px;
+        color: #374151;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 300px;
+        transform: translateX(400px);
+        transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    
+    .toast.show {
+        transform: translateX(0);
+    }
+    
+    .toast.success {
+        border-left: 4px solid var(--success-color);
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), var(--card-bg));
+    }
+    
+    .toast.error {
+        border-left: 4px solid var(--danger-color);
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), var(--card-bg));
+    }
+    
+    .toast.info {
+        border-left: 4px solid var(--info-color);
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), var(--card-bg));
+    }
+    
+    .toast.warning {
+        border-left: 4px solid var(--warning-color);
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), var(--card-bg));
+    }
+    
+    .toast-icon {
+        font-size: 1.2em;
+        flex-shrink: 0;
+    }
+    
+    .toast-message {
+        flex: 1;
+    }
+    
+    .toast-close {
+        background: none;
+      border: none;
+        color: #888;
+      cursor: pointer;
+        font-size: 1.1em;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s;
+    }
+    
+    .toast-close:hover {
+        background: rgba(0, 0, 0, 0.1);
+        color: #374151;
+    }
+
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    /* Loading spinner moderno */
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Responsive design mejorado */
+    @media (max-width: 768px) {
+        .header h1 {
+            font-size: 2rem;
+        }
+
+        .nav-tabs {
+            margin: 1rem;
+            flex-direction: column;
+        }
+
+        .nav-tabs button {
+      width: 100%;
+        }
+
+        .container {
+            padding: 1rem;
+        }
+
+        .config-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .stats-summary {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* Animaciones adicionales */
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-up {
+        animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--primary-gradient);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--secondary-gradient);
+    }
+
+    /* Efectos de hover para elementos interactivos */
+    .interactive {
+        transition: all 0.3s ease;
+    }
+
+    .interactive:hover {
+        transform: scale(1.02);
+    }
+
+    /* Badges modernos */
+    .badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .badge-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    .badge-warning {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+    }
+
+    .badge-danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
+    .badge-info {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+    }
+
+    /* Contenedor principal */
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    /* Tarjetas con diseño moderno */
+    .card {
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .card h3 {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Badges para factibilidad */
+    .badge-factible { 
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+        color: white; 
+        border-radius: 8px; 
+        padding: 2px 10px; 
+        font-weight: 700; 
+    }
+    .badge-nofactible { 
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); 
+        color: white; 
+        border-radius: 8px; 
+        padding: 2px 10px; 
+        font-weight: 700; 
+    }
+    .badge-indef { 
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); 
+        color: white; 
+        border-radius: 8px; 
+        padding: 2px 10px; 
+        font-weight: 700; 
+    }
+
+    /* Torres multipunto */
+    .torre-lado {
+      position: fixed;
+      top: 180px;
+      width: 110px;
+      z-index: 2;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: var(--border-radius);
+        padding: 1rem;
+        box-shadow: var(--shadow-lg);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+    }
+    .torre-lado.izq { left: 10px; }
+    .torre-lado.der { right: 10px; }
+    .torre-img {
+      width: 90px;
+      margin-top: 6px;
+        filter: drop-shadow(0 0 18px var(--primary-color));
+    }
+    .torre-label {
+        background: var(--card-bg);
+        color: var(--primary-color);
+        border-radius: var(--border-radius);
+      padding: 6px 0 2px 0;
+      margin-bottom: 0;
+      font-size: 1rem;
+      font-weight: 700;
+        box-shadow: var(--shadow-md);
+    }
+
+    /* Perfil de elevación */
+    .perfil-elevacion-box {
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        padding: 2rem;
+        margin: 2rem auto 0 auto;
+      max-width: 1100px;
+      min-height: 260px;
+        color: #374151;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .perfil-elevacion-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .perfil-elevacion-content {
+      width: 100%;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: #b2ebf2;
+    }
+    @media (max-width: 700px) {
+      .perfil-elevacion-box {
+        padding: 14px 4vw 14px 4vw;
+        min-height: 120px;
+      }
+      .perfil-elevacion-title {
+        font-size: 1.1rem;
+      }
+    }
+    #perfil-elevacion-info b {
+  color: #00e6ff;
+  font-weight: 700;
+}
+.ptmp-bottom-panel {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  background: #181f2a;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px #00e6ff33;
+  padding: 18px 32px 12px 32px;
+  z-index: 100;
+  min-width: 900px;
+  max-width: 98vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid #00e6ff33;
+}
+.ptmp-bottom-flex {
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
+}
+.ptmp-bottom-icons {
+  display: flex;
+  gap: 32px;
+  align-items: flex-end;
+}
+.ptmp-bottom-label {
+  color: #b2ebf2;
+  font-size: 0.95rem;
+  text-align: center;
+  margin-top: 4px;
+}
+.ptmp-bottom-value {
+  color: #00e6ff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+}
+.ptmp-bottom-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ptmp-bottom-pathinfo {
+  color: #b2ebf2;
+  font-size: 1.05rem;
+  margin-top: 4px;
+  text-align: center;
+}
+@media (max-width: 900px) {
+  .ptmp-bottom-panel { min-width: 0; padding: 8px 2vw; }
+  .ptmp-bottom-flex { flex-direction: column; align-items: center; gap: 12px; }
+  .ptmp-bottom-profile { width: 100%; }
+  #perfilElevacionPlotly { width: 100% !important; }
+}
+.ptmp-bottom-panel {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  background: #181f2aee;
+  border-radius: 22px;
+  box-shadow: 0 4px 32px #00e6ff55;
+  padding: 18px 32px 12px 32px;
+  z-index: 100;
+  min-width: 900px;
+  max-width: 98vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid #00e6ff33;
+  backdrop-filter: blur(6px);
+  transition: box-shadow 0.2s;
+}
+.ptmp-bottom-panel:hover {
+  box-shadow: 0 8px 48px #00e6ff99;
+}
+.ptmp-bottom-flex {
+  display: flex;
+  align-items: flex-end;
+  gap: 38px;
+}
+.ptmp-bottom-icons {
+  display: flex;
+  gap: 38px;
+  align-items: flex-end;
+}
+.ptmp-bottom-label {
+  color: #b2ebf2;
+  font-size: 1.02rem;
+  text-align: center;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+.ptmp-bottom-value {
+  color: #00e6ff;
+  font-size: 1.22rem;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 2px;
+  text-shadow: 0 2px 8px #00e6ff44;
+}
+.ptmp-bottom-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ptmp-bottom-pathinfo {
+  color: #b2ebf2;
+  font-size: 1.09rem;
+  margin-top: 6px;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+@media (max-width: 900px) {
+  .ptmp-bottom-panel { min-width: 0; padding: 8px 2vw; }
+  .ptmp-bottom-flex { flex-direction: column; align-items: center; gap: 12px; }
+  .ptmp-bottom-profile { width: 100%; }
+  #perfilElevacionPlotly { width: 100% !important; }
+}
+#cerrar-panel-ptmp:hover {
+  color: #ef4444;
+  background: #00e6ff22;
+  border-radius: 50%;
+}
+.ptmp-bottom-panel {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  z-index: 9999;
+  /* ...resto de tu estilo... */
+}
+    .leaflet-container {
+      z-index: 1 !important;
+    }
+
+    /* Mejoras adicionales para el video de fondo */
+    .video-bg {
+      opacity: 0.7 !important;
+      filter: brightness(0.9) contrast(1.2) saturate(1.1) !important;
+    }
+
+    .overlay {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.3), rgba(30, 41, 59, 0.2)) !important;
+      backdrop-filter: blur(0.5px) !important;
+    }
+
+    /* Mejora de contraste para las tarjetas */
+    .card {
+      background: rgba(255, 255, 255, 0.98) !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+      border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    }
+
+    /* Mejora del header para mejor contraste */
+    .header {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.9), rgba(2, 132, 199, 0.85)) !important;
+      box-shadow: 0 12px 40px rgba(14, 165, 233, 0.3) !important;
+    }
+
+    /* Estilos para el sistema de pestañas */
+    .pestana-contenido {
+      display: none;
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Mejoras adicionales para inputs */
+    .form-control:focus {
+      outline: none;
+      border-color: #0ea5e9 !important;
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+      transform: translateY(-1px) !important;
+    }
+
+    /* Efectos de hover mejorados para botones */
+    .btn:hover {
+      transform: translateY(-3px) !important;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* Animaciones para las tarjetas */
+    .card {
+      animation: slideInUp 0.6s ease-out;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Efecto de partículas en el fondo */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(14, 165, 233, 0.6);
+      border-radius: 50%;
+      animation: float 6s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body> 
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+  
+  <!-- Video de fondo -->
+  <video class="video-bg" src="https://dl.dropboxusercontent.com/scl/fi/isjx084d625twlii2vmkd/Proyecto-video.mp4?rlkey=k2dwu1ek0lt5w77whlzq80zes&st=4h4wxyq1" autoplay loop muted playsinline></video>
+  <div class="overlay"></div>
+  
+  <!-- Sistema de partículas -->
+  <div class="particles" id="particles"></div>
+  
+  <!-- Botón de navegación -->
+  <div style="position: fixed; top: 20px; left: 20px; z-index: 1000;">
+    <button class="btn btn-info" onclick="window.location.href='ptpFangio.html'" style="
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(59, 130, 246, 0.4)'" 
+       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.3)'">
+      <i class="fas fa-arrow-left"></i> PtP
+    </button>
+  </div>
+  <div class="torre-lado izq">
+    <div class="torre-label">
+      <span>ID</span><br>
+      <span>Nombre</span><br>
+      <span>Altura m</span>
+    </div>
+    <div class="torre-svg">
+      <svg width="60" height="100" viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="26" y="80" width="8" height="15" rx="4" fill="#b0bec5"/>
+        <rect x="20" y="10" width="20" height="70" rx="10" fill="#e0e0e0" stroke="#00e6ff" stroke-width="2"/>
+        <rect x="27" y="20" width="6" height="50" rx="3" fill="#00e6ff" opacity="0.7"/>
+        <line x1="30" y1="20" x2="10" y2="90" stroke="#00e6ff" stroke-width="2"/>
+        <line x1="30" y1="20" x2="50" y2="90" stroke="#00e6ff" stroke-width="2"/>
+        <circle cx="30" cy="15" r="7" fill="#00e6ff" stroke="#fff" stroke-width="2"/>
+        <circle cx="30" cy="15" r="3" fill="#fff"/>
+      </svg>
+    </div>
+    <div class="torre-txt">Torre multipunto</div>
+  </div>
+  <div class="torre-lado der">
+    <div class="torre-label">
+      <span>ID</span><br>
+      <span>Nombre</span><br>
+      <span>Altura m</span>
+    </div>
+    <div class="torre-svg">
+      <svg width="60" height="100" viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="26" y="80" width="8" height="15" rx="4" fill="#b0bec5"/>
+        <rect x="20" y="10" width="20" height="70" rx="10" fill="#e0e0e0" stroke="#00e6ff" stroke-width="2"/>
+        <rect x="27" y="20" width="6" height="50" rx="3" fill="#00e6ff" opacity="0.7"/>
+        <line x1="30" y1="20" x2="10" y2="90" stroke="#00e6ff" stroke-width="2"/>
+        <line x1="30" y1="20" x2="50" y2="90" stroke="#00e6ff" stroke-width="2"/>
+        <circle cx="30" cy="15" r="7" fill="#00e6ff" stroke="#fff" stroke-width="2"/>
+        <circle cx="30" cy="15" r="3" fill="#fff"/>
+      </svg>
+    </div>
+    <div class="torre-txt">Torre multipunto</div>
+  </div>
+  <div class="container">
+    <div class="header">
+      <div class="header-content">
+        <h1><i class="fas fa-broadcast-tower"></i> Fangio Telecom</h1>
+        <p>Enlaces Punto a Multipunto (PtMP)</p>
+        <div class="header-badge">
+          <i class="fas fa-satellite-dish"></i> Análisis de enlaces via Microondas
+        </div>
+      </div>
+    </div>
+    <!-- Panel de Gestión de Bases de Datos Ultra Profesional -->
+    <div class="card" style="
+      background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(248,250,252,0.95));
+      border: 2px solid rgba(14, 165, 233, 0.3);
+      box-shadow: 0 12px 40px rgba(14, 165, 233, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    ">
+      <div style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #0ea5e9, #0284c7, #8b5cf6);
+        border-radius: 2px;
+      "></div>
+      
+      <h3 style="
+        color: var(--primary-color); 
+        font-size: 2rem; 
+        margin-bottom: 2rem;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+      ">
+        <div style="
+          background: linear-gradient(135deg, #0ea5e9, #0284c7);
+          width: 50px;
+          height: 50px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        ">
+          <i class="fas fa-database" style="color: white; font-size: 1.5rem;"></i>
+        </div>
+        Gestión de Bases de Datos
+      </h3>
+      
+      <div style="display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: end; margin-bottom: 2rem;">
+        <div class="form-group">
+          <label for="selectorBase" style="font-weight: 600; color: #374151; margin-bottom: 0.75rem;">
+            <i class="fas fa-list"></i> Selecciona Base de Datos:
+          </label>
+          <select id="selectorBase" class="form-control" onchange="cambiarBase()" style="
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            transition: var(--transition);
+          ">
+            <option value="">-- Nueva Base --</option>
+          </select>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="nuevaBase()" style="
+            background: var(--primary-gradient);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+          ">
+            <i class="fas fa-plus"></i> Nueva Base
+          </button>
+          <button class="btn btn-success" onclick="guardarBase()" style="
+            background: linear-gradient(135deg, #10b981, #059669);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+          ">
+            <i class="fas fa-save"></i> Guardar Base
+          </button>
+          <button class="btn btn-danger" onclick="eliminarBase()" style="
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+          ">
+            <i class="fas fa-trash"></i> Eliminar Base
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel de Datos de la Estación Base Ultra Profesional -->
+    <div class="card" style="
+      background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(248,250,252,0.95));
+      border: 2px solid rgba(139, 92, 246, 0.3);
+      box-shadow: 0 12px 40px rgba(139, 92, 246, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    ">
+      <div style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #8b5cf6, #7c3aed, #6366f1);
+        border-radius: 2px;
+      "></div>
+      
+      <h3 style="
+        color: var(--secondary-color); 
+        font-size: 2rem; 
+        margin-bottom: 2rem;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+      ">
+        <div style="
+          background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+          width: 50px;
+          height: 50px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        ">
+          <i class="fas fa-broadcast-tower" style="color: white; font-size: 1.5rem;"></i>
+        </div>
+        Configuración de la Estación Base
+      </h3>
+      
+      <div class="config-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        <div class="form-group">
+          <label for="idBase" style="font-weight: 600; color: #374151; margin-bottom: 0.75rem;">
+            <i class="fas fa-hashtag"></i> ID Base
+          </label>
+          <input type="text" id="idBase" class="form-control" placeholder="Ej: BASE001" style="
+            padding: 14px 18px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
+          " onfocus="this.style.borderColor='#0ea5e9'; this.style.boxShadow='0 0 0 3px rgba(14, 165, 233, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1)'; this.style.transform='translateY(-1px)'" 
+             onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.05)'; this.style.transform='translateY(0)'" />
+        </div>
+        
+        <div class="form-group">
+          <label for="nombreBase" style="font-weight: 600; color: #374151; margin-bottom: 0.75rem;">
+            <i class="fas fa-tag"></i> Nombre Base
+          </label>
+          <input type="text" id="nombreBase" class="form-control" placeholder="Ej: Torre Principal" style="
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            transition: var(--transition);
+          " />
+        </div>
+        
+        <div class="form-group">
+          <label for="latBase" style="font-weight: 600; color: #374151; margin-bottom: 0.75rem;">
+            <i class="fas fa-map-marker-alt"></i> Latitud Base
+          </label>
+          <input type="text" id="latBase" class="form-control" placeholder="Ej: 19.4326" style="
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            transition: var(--transition);
+          " />
+        </div>
+        
+        <div class="form-group">
+          <label for="lonBase" style="font-weight: 600; color: #374151; margin-bottom: 0.75rem;">
+            <i class="fas fa-map-marker-alt"></i> Longitud Base
+          </label>
+          <input type="text" id="lonBase" class="form-control" placeholder="Ej: -99.1332" style="
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            transition: var(--transition);
+          " />
+        </div>
+        
+        <div class="form-group">
+          <label for="alturaBase" style="font-weight: 600; color: #374151; margin-bottom: 0.75rem;">
+            <i class="fas fa-arrow-up"></i> Altura Base (m)
+          </label>
+          <input type="text" id="alturaBase" class="form-control" placeholder="Ej: 30" style="
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            transition: var(--transition);
+          " />
+        </div>
+        
+        <div class="form-group">
+          <label for="tipoBase" style="font-weight: 600; color: #374151; margin-bottom: 0.75rem;">
+            <i class="fas fa-tower-broadcast"></i> Tipo de Torre Base
+          </label>
+          <input type="text" id="tipoBase" class="form-control" placeholder="Ej: E5 BSI" style="
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            transition: var(--transition);
+          " />
+        </div>
+        
+        <div class="form-group">
+          <label for="transporteBase" style="font-weight: 600; color: #374151; margin-bottom: 0.75rem;">
+            <i class="fas fa-network-wired"></i> Transporte Base
+          </label>
+          <input type="text" id="transporteBase" class="form-control" placeholder="Ej: Fibra óptica" style="
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            transition: var(--transition);
+          " />
+        </div>
+        
+        <div class="form-group">
+          <label for="frecuenciaBase" style="font-weight: 600; color: #374151; margin-bottom: 0.75rem;">
+            <i class="fas fa-wave-square"></i> Frecuencia (GHz)
+          </label>
+          <input type="text" id="frecuenciaBase" class="form-control" value="4.9" style="
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            transition: var(--transition);
+          " />
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sistema de Navegación por Pestañas Profesional -->
+    <div style="
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    ">
+      <div style="
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      ">
+        <button onclick="mostrarPestana('clientes')" id="btn-clientes" style="
+          padding: 12px 24px;
+          border: none;
+          border-radius: 12px;
+          background: linear-gradient(135deg, #10b981, #059669);
+          color: white;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.4)'" 
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.3)'">
+          <i class="fas fa-users"></i> Gestión de Clientes
+        </button>
+        
+        <button onclick="mostrarPestana('analisis')" id="btn-analisis" style="
+          padding: 12px 24px;
+          border: none;
+          border-radius: 12px;
+          background: linear-gradient(135deg, #3b82f6, #2563eb);
+          color: white;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(59, 130, 246, 0.4)'" 
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.3)'">
+          <i class="fas fa-chart-line"></i> Análisis Técnico
+        </button>
+        
+        <button onclick="mostrarPestana('mapa')" id="btn-mapa" style="
+          padding: 12px 24px;
+          border: none;
+          border-radius: 12px;
+          background: linear-gradient(135deg, #f59e0b, #d97706);
+          color: white;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(245, 158, 11, 0.4)'" 
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(245, 158, 11, 0.3)'">
+          <i class="fas fa-map"></i> Visualización
+        </button>
+      </div>
+    </div>
+    
+    <!-- Contenido de Pestañas -->
+    <div id="pestana-clientes" class="pestana-contenido">
+      <div class="card" style="
+        background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(248,250,252,0.95));
+        border: 2px solid rgba(16, 185, 129, 0.3);
+        box-shadow: 0 12px 40px rgba(16, 185, 129, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      ">
+        <div style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 4px;
+          height: 100%;
+          background: linear-gradient(180deg, #10b981, #059669, #047857);
+          border-radius: 2px;
+        "></div>
+        
+        <h3 style="
+          color: #10b981; 
+          font-size: 2rem; 
+          margin-bottom: 2rem;
+          font-weight: 800;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          position: relative;
+        ">
+          <div style="
+            background: linear-gradient(135deg, #10b981, #059669);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+          ">
+            <i class="fas fa-user-plus" style="color: white; font-size: 1.5rem;"></i>
+          </div>
+          Gestión de Clientes
+        </h3>
+      <div class="config-grid">
+        <div class="form-group">
+        <label for="idCliente">ID Cliente</label>
+          <input type="text" id="idCliente" class="form-control" />
+      </div>
+        <div class="form-group">
+        <label for="nombreCliente">Nombre Cliente</label>
+          <input type="text" id="nombreCliente" class="form-control" />
+      </div>
+        <div class="form-group">
+        <label for="latCliente">Latitud Cliente</label>
+          <input type="text" id="latCliente" class="form-control" />
+      </div>
+        <div class="form-group">
+        <label for="lonCliente">Longitud Cliente</label>
+          <input type="text" id="lonCliente" class="form-control" />
+      </div>
+        <div class="form-group">
+        <label for="alturaCliente">Altura Cliente (m)</label>
+          <input type="text" id="alturaCliente" class="form-control" />
+      </div>
+        <div class="form-group">
+        <label for="tipoCliente">Tipo de Torre Cliente</label>
+          <input type="text" id="tipoCliente" class="form-control" />
+      </div>
+        <div class="form-group">
+        <label for="transporteCliente">Transporte Cliente</label>
+          <input type="text" id="transporteCliente" class="form-control" />
+      </div>
+    </div>
+      <button class="btn btn-primary" onclick="agregarCliente()">
+        <i class="fas fa-plus"></i> Agregar Cliente
+      </button>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-users"></i> Clientes Registrados</h3>
+      <div class="table-container">
+<table id="tablaClientes">
+<thead>
+  <tr>
+    <th>ID Cliente</th>
+    <th>Nombre</th>
+    <th>Latitud</th>
+    <th>Longitud</th>
+    <th>Altura</th>
+    <th>Tipo Torre</th>
+    <th>Transporte</th>
+    <th>Distancia (km)</th>
+    <th>Factibilidad</th>
+    <th>Acción</th>
+    <th>Reporte</th>
+  </tr>
+</thead>
+  <tbody id="tablaClientesBody"></tbody>
+</table>
+      </div>
+    </div>
+  
+    <!-- Panel de Análisis Microondas para PtMP -->
+    <div class="panel-microondas">
+      <h3>
+        <i class="fas fa-satellite-dish"></i> Análisis Especializado de Microondas PtMP
+      </h3>
+      
+      <!-- Configuración de Análisis -->
+      <div class="config-grid">
+        <div class="form-group">
+          <label for="clima-ptmp">Clima:</label>
+          <select id="clima-ptmp" class="form-control">
+            <option value="tropical">Tropical</option>
+            <option value="temperate" selected>Temperate</option>
+            <option value="arid">Arid</option>
+            <option value="cold">Cold</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="potencia-tx-ptmp">Potencia TX Base (dBm):</label>
+          <input type="number" id="potencia-tx-ptmp" class="form-control" value="25" min="0" max="50">
+        </div>
+        <div class="form-group">
+          <label for="sensibilidad-rx-ptmp">Sensibilidad RX Cliente (dBm):</label>
+          <input type="number" id="sensibilidad-rx-ptmp" class="form-control" value="-85" min="-120" max="-50">
+        </div>
+        <div class="form-group">
+          <label for="disponibilidad-objetivo-ptmp">Disponibilidad Objetivo (%):</label>
+          <input type="number" id="disponibilidad-objetivo-ptmp" class="form-control" value="99.5" min="99" max="99.999" step="0.001">
+        </div>
+      </div>
+      
+      <button class="btn btn-primary" onclick="analizarMicroondasPtMP()">
+        <i class="fas fa-play"></i> Analizar Enlaces Microondas PtMP
+      </button>
+    
+      <!-- Resultados del Análisis -->
+      <div id="resultados-microondas-ptmp" class="resultados-microondas" style="display: none;">
+        <div class="stats-summary">
+          <div class="stat-item">
+          <h4 style="color: #10b981; margin-bottom: 10px;">
+            <i class="fas fa-check-circle"></i> Enlaces Viables
+          </h4>
+          <div id="enlaces-viables-ptmp" style="font-size: 2rem; font-weight: 700; color: #10b981;">0</div>
+        </div>
+        <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(11, 17, 31, 0.8)); border: 1px solid #ef4444; border-radius: 16px; padding: 20px; text-align: center;">
+          <h4 style="color: #ef4444; margin-bottom: 10px;">
+            <i class="fas fa-times-circle"></i> Enlaces Críticos
+          </h4>
+          <div id="enlaces-criticos-ptmp" style="font-size: 2rem; font-weight: 700; color: #ef4444;">0</div>
+        </div>
+        <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(11, 17, 31, 0.8)); border: 1px solid #3b82f6; border-radius: 16px; padding: 20px; text-align: center;">
+          <h4 style="color: #3b82f6; margin-bottom: 10px;">
+            <i class="fas fa-percentage"></i> Disponibilidad Promedio
+          </h4>
+          <div id="disponibilidad-promedio-ptmp" style="font-size: 2rem; font-weight: 700; color: #3b82f6;">0%</div>
+        </div>
+        <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(11, 17, 31, 0.8)); border: 1px solid #f59e0b; border-radius: 16px; padding: 20px; text-align: center;">
+          <h4 style="color: #f59e0b; margin-bottom: 10px;">
+            <i class="fas fa-users"></i> Clientes Activos
+          </h4>
+          <div id="clientes-activos-ptmp" style="font-size: 2rem; font-weight: 700; color: #f59e0b;">0</div>
+        </div>
+      </div>
+      
+      <!-- Tabla de Análisis Detallado -->
+      <div style="background: rgba(11, 17, 31, 0.8); border: 1px solid rgba(0, 230, 255, 0.2); border-radius: 16px; padding: 20px;">
+        <h3 style="color: #00e6ff; margin-bottom: 20px;">
+          <i class="fas fa-table"></i> Análisis Detallado por Cliente
+        </h3>
+        <div style="overflow-x: auto;">
+          <table id="tabla-analisis-ptmp" style="width: 100%; border-collapse: collapse; color: #e0f7fa;">
+            <thead>
+              <tr style="background: rgba(0, 230, 255, 0.1);">
+                <th style="padding: 12px; text-align: left; border-bottom: 1px solid rgba(0, 230, 255, 0.3);">Cliente</th>
+                <th style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(0, 230, 255, 0.3);">Distancia (km)</th>
+                <th style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(0, 230, 255, 0.3);">Frecuencia (GHz)</th>
+                <th style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(0, 230, 255, 0.3);">Path Loss (dB)</th>
+                <th style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(0, 230, 255, 0.3);">Margen (dB)</th>
+                <th style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(0, 230, 255, 0.3);">Disponibilidad (%)</th>
+                <th style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(0, 230, 255, 0.3);">Estado</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-analisis-ptmp">
+              <!-- Los datos se cargarán dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div id="ptmp-bottom-panel" class="ptmp-bottom-panel" style="display:none; position:fixed;">
+  <button id="cerrar-panel-ptmp" title="Cerrar" style="
+    position:absolute;top:12px;right:16px;
+    background:transparent;border:none;
+    font-size:1.8rem;line-height:1;
+    color:#00e6ff;cursor:pointer;
+    z-index:10;transition:color 0.2s;">
+    &times;
+  </button>
+  <div class="ptmp-bottom-flex">
+    <div class="ptmp-bottom-icons">
+      <div>
+        <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.29.0/icons/navigation.svg" width="32" style="filter:invert(60%)" alt="Azimuth"/>
+        <div class="ptmp-bottom-label">Azimuth</div>
+        <div class="ptmp-bottom-value" id="azimuth-value">--</div>
+      </div>
+      <div>
+        <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.29.0/icons/activity.svg" width="32" style="filter:invert(60%)" alt="Elevación"/>
+        <div class="ptmp-bottom-label">Elevación</div>
+        <div class="ptmp-bottom-value" id="elevacion-value">--</div>
+      </div>
+      <div>
+        <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.29.0/icons/arrow-up.svg" width="32" style="filter:invert(60%)" alt="Altura Base"/>
+        <div class="ptmp-bottom-label">Altura Base</div>
+        <div class="ptmp-bottom-value" id="altura-base-value">--</div>
+      </div>
+      <div>
+        <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.29.0/icons/arrow-down.svg" width="32" style="filter:invert(60%)" alt="Altura Cliente"/>
+        <div class="ptmp-bottom-label">Altura Cliente</div>
+        <div class="ptmp-bottom-value" id="altura-cliente-value">--</div>
+      </div>
+    </div>
+  <div class="ptmp-bottom-profile">
+  <div id="perfilElevacionPlotly" style="width:800px;height:320px;border-radius:14px;overflow:hidden;box-shadow:0 2px 16px #00e6ff33;max-width:90vw;"></div>
+  <div style="display:flex;gap:32px;justify-content:center;margin:12px 0 0 0;">
+    <div>
+      <label style="color:#b2ebf2;font-size:0.95rem;">Altura Torre A</label>
+      <input type="range" id="sliderAlturaA" min="1" max="120" value="10" style="width:120px;">
+      <span id="sliderAlturaAValue" style="color:#00e6ff;font-weight:700;">10 m</span>
+    </div>
+    <div>
+      <label style="color:#b2ebf2;font-size:0.95rem;">Altura Torre B</label>
+      <input type="range" id="sliderAlturaB" min="1" max="120" value="10" style="width:120px;">
+      <span id="sliderAlturaBValue" style="color:#00e6ff;font-weight:700;">10 m</span>
+    </div>
+  </div>
+  <div class="ptmp-bottom-pathinfo" id="ptmp-bottom-pathinfo">Path profile: --</div>
+</div>>
+  </div>
+</div>
+      <div id="ptmp-mapa" style="width:100%;height:480px;border-radius:18px;box-shadow:0 2px 24px #00e6ff33;margin-bottom:32px;"></div>
+  </div>
+  <script>
+window.bases = [];
+window.baseSeleccionada = null;
+
+// Sistema de pestañas profesional
+function mostrarPestana(pestana) {
+  // Ocultar todas las pestañas
+  const pestanas = document.querySelectorAll('.pestana-contenido');
+  pestanas.forEach(p => p.style.display = 'none');
+  
+  // Resetear todos los botones
+  const botones = document.querySelectorAll('[id^="btn-"]');
+  botones.forEach(b => {
+    b.style.background = 'linear-gradient(135deg, #6b7280, #4b5563)';
+    b.style.boxShadow = '0 4px 12px rgba(107, 114, 128, 0.3)';
+  });
+  
+  // Mostrar pestaña seleccionada
+  const pestanaElement = document.getElementById(`pestana-${pestana}`);
+  if (pestanaElement) {
+    pestanaElement.style.display = 'block';
+  }
+  
+  // Activar botón correspondiente
+  const boton = document.getElementById(`btn-${pestana}`);
+  if (boton) {
+    if (pestana === 'clientes') {
+      boton.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+      boton.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
+    } else if (pestana === 'analisis') {
+      boton.style.background = 'linear-gradient(135deg, #3b82f6, #2563eb)';
+      boton.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.3)';
+    } else if (pestana === 'mapa') {
+      boton.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+      boton.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+    }
+  }
+}
+
+// Inicializar con la pestaña de clientes
+document.addEventListener('DOMContentLoaded', function() {
+  mostrarPestana('clientes');
+  crearParticulas();
+});
+
+// Sistema de partículas
+function crearParticulas() {
+  const particlesContainer = document.getElementById('particles');
+  const numParticles = 50;
+  
+  for (let i = 0; i < numParticles; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 6 + 's';
+    particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+    particlesContainer.appendChild(particle);
+  }
+}
+
+// Utilidades
+function calcularDistancia(lat1, lon1, lat2, lon2) {
+  const rad = x => x * Math.PI / 180;
+  const R = 6371.0088;
+  const φ1 = rad(lat1), φ2 = rad(lat2);
+  const Δφ = rad(lat2 - lat1);
+  const Δλ = rad(lon2 - lon1);
+  const a = Math.sin(Δφ / 2) ** 2 +
+            Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+function eliminarBase() {
+  if (window.baseSeleccionada === null || !window.bases[window.baseSeleccionada]) {
+    alert('Selecciona una base para eliminar.');
+    return;
+  }
+  if (!confirm('¿Seguro que deseas eliminar esta base y todos sus clientes?')) return;
+  window.bases.splice(window.baseSeleccionada, 1);
+  window.baseSeleccionada = null;
+  guardarDatosEnLocalStorage();
+  actualizarSelectorBases();
+  renderTablaClientes();
+  mostrarMapaPtMP();
+  nuevaBase();
+}
+
+function analizarFactibilidadPtMP(distanciaKm, alturaBase, alturaCliente, tipoBase, tipoCliente, fresnelObstruido, margenDespejeMetros = 1) {
+  if (isNaN(distanciaKm) || distanciaKm <= 0) {
+    return { estado: 'N/D', badge: 'badge-indef', motivo: 'Datos insuficientes' };
+  }
+
+  // ⚠️ Validación específica para E6-ST18 (Cliente)
+  if ((tipoCliente || '').toUpperCase().includes('E6-ST18') && distanciaKm > 10) {
+    return { estado: 'NO FACTIBLE', badge: 'badge-nofactible', motivo: 'Distancia excede límite de 10 km para E6-ST18' };
+  }
+
+  // Validación general de distancia para PtMP
+  if (distanciaKm > 10) {
+    return { estado: 'NO FACTIBLE', badge: 'badge-nofactible', motivo: 'Distancia excesiva para PtMP' };
+  }
+
+  if (alturaBase < 10 || alturaCliente < 5) {
+    return { estado: 'NO FACTIBLE', badge: 'badge-nofactible', motivo: 'Altura insuficiente' };
+  }
+
+  if ((tipoBase || '').toLowerCase().includes('poste') || (tipoCliente || '').toLowerCase().includes('poste')) {
+    return { estado: 'NO FACTIBLE', badge: 'badge-nofactible', motivo: 'Torre tipo poste no recomendada' };
+  }
+
+  if (fresnelObstruido) {
+    return { estado: 'NO FACTIBLE', badge: 'badge-nofactible', motivo: 'Obstrucción en zona Fresnel' };
+  }
+
+  return { estado: 'FACTIBLE', badge: 'badge-factible', motivo: 'Enlace despejado' };
+}
+
+function actualizarSelectorBases() {
+  let sel = document.getElementById('selectorBase');
+  if (!sel) {
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <label for="selectorBase" style="font-weight:600;color:#00bcd4;">Selecciona Base:</label>
+      <select id="selectorBase" onchange="cambiarBase()" style="margin:0 12px 12px 8px;padding:6px 12px;border-radius:8px;">
+        <option value="">-- Nueva Base --</option>
+      </select>
+      <button class="btn" onclick="nuevaBase()">Nueva Base</button>
+      <button class="btn" onclick="guardarBase()">Guardar Base</button>
+    `;
+    document.querySelector('.container').insertBefore(div, document.querySelector('.container').children[2]);
+    sel = document.getElementById('selectorBase');
+  }
+  sel.innerHTML = `<option value="">-- Nueva Base --</option>`;
+  window.bases.forEach(b => {
+    sel.innerHTML += `<option value="${b.idBase}">${b.nombreBase} (${b.idBase})</option>`;
+  });
+  if (window.baseSeleccionada !== null && window.bases[window.baseSeleccionada]) {
+    sel.value = window.bases[window.baseSeleccionada].idBase;
+  } else {
+    sel.value = '';
+  }
+}
+
+function nuevaBase() {
+  document.getElementById('idBase').value = '';
+  document.getElementById('nombreBase').value = '';
+  document.getElementById('latBase').value = '';
+  document.getElementById('lonBase').value = '';
+  document.getElementById('alturaBase').value = '';
+  document.getElementById('tipoBase').value = 'E5 BSI';
+  document.getElementById('transporteBase').value = 'Fibra óptica';
+  document.getElementById('frecuenciaBase').value = '4.9';
+  window.baseSeleccionada = null;
+  renderTablaClientes();
+  mostrarMapaPtMP();
+  actualizarSelectorBases();
+}
+function limpiarClienteConDefault() {
+  document.getElementById('idCliente').value = '';
+  document.getElementById('nombreCliente').value = '';
+  document.getElementById('latCliente').value = '';
+  document.getElementById('lonCliente').value = '';
+  document.getElementById('alturaCliente').value = ''; // ← Vacío para que tú lo propongas
+  document.getElementById('tipoCliente').value = 'E6-ST18';
+  document.getElementById('transporteCliente').value = 'Inalámbrico';
+}
+
+function guardarBase() {
+  if (!document.getElementById('alturaBase').value) document.getElementById('alturaBase').value = '30';
+  if (!document.getElementById('tipoBase').value) document.getElementById('tipoBase').value = 'E5 BSI';
+  if (!document.getElementById('transporteBase').value) document.getElementById('transporteBase').value = 'Fibra óptica';
+  if (!document.getElementById('frecuenciaBase').value) document.getElementById('frecuenciaBase').value = '5.8';
+    const frecuenciaBase = parseFloat(document.getElementById('frecuenciaBase').value);
+  const idBase = document.getElementById('idBase').value.trim();
+  if (frecuenciaBase < 4.9 || frecuenciaBase > 6.0) {
+  alert('La frecuencia debe estar entre 4.9 y 6.0 GHz');
+  return;
+}
+  const nombreBase = document.getElementById('nombreBase').value.trim();
+  const latBase = parseFloat(document.getElementById('latBase').value);
+  const lonBase = parseFloat(document.getElementById('lonBase').value);
+  const alturaBase = parseFloat(document.getElementById('alturaBase').value);
+  const tipoBase = document.getElementById('tipoBase').value.trim();
+  const transporteBase = document.getElementById('transporteBase').value.trim();
+
+  if (!idBase || !nombreBase || isNaN(latBase) || isNaN(lonBase) || isNaN(alturaBase)) {
+    alert('Completa los datos de la estación base.');
+    return;
+  }
+
+  let idx = window.bases.findIndex(b => b.idBase === idBase);
+  if (idx === -1) {
+    window.bases.push({
+      idBase, nombreBase, latBase, lonBase, alturaBase, tipoBase, transporteBase, frecuenciaBase,
+      clientes: []
+    });
+    idx = window.bases.length - 1;
+  } else {
+    // Mantén los clientes existentes
+    const clientes = window.bases[idx].clientes || [];
+    window.bases[idx] = { idBase, nombreBase, latBase, lonBase, alturaBase, tipoBase, transporteBase, frecuenciaBase, clientes };
+  }
+  window.baseSeleccionada = idx;
+  actualizarSelectorBases();
+  renderTablaClientes();
+  mostrarMapaPtMP();
+  guardarDatosEnLocalStorage();
+}
+
+function cambiarBase() {
+  const id = document.getElementById('selectorBase').value;
+  const idx = window.bases.findIndex(b => b.idBase === id);
+  if (idx === -1) {
+    nuevaBase();
+    return;
+  }
+  window.baseSeleccionada = idx;
+  const base = window.bases[idx];
+  document.getElementById('idBase').value = base.idBase;
+  document.getElementById('nombreBase').value = base.nombreBase;
+  document.getElementById('latBase').value = base.latBase;
+  document.getElementById('lonBase').value = base.lonBase;
+  document.getElementById('alturaBase').value = base.alturaBase;
+  document.getElementById('tipoBase').value = base.tipoBase;
+  document.getElementById('transporteBase').value = base.transporteBase;
+  document.getElementById('frecuenciaBase').value = base.frecuenciaBase;
+  renderTablaClientes();
+  mostrarMapaPtMP();
+}
+
+
+function agregarCliente() {
+  if (window.baseSeleccionada === null || window.baseSeleccionada === undefined || !window.bases[window.baseSeleccionada]) {
+    guardarBase();
+    if (window.baseSeleccionada === null || window.baseSeleccionada === undefined || !window.bases[window.baseSeleccionada]) return;
+  }
+  const base = window.bases[window.baseSeleccionada];
+  const idCliente = document.getElementById('idCliente').value.trim();
+  const nombreCliente = document.getElementById('nombreCliente').value.trim();
+  const latCliente = parseFloat(document.getElementById('latCliente').value);
+  const lonCliente = parseFloat(document.getElementById('lonCliente').value);
+  const alturaCliente = parseFloat(document.getElementById('alturaCliente').value);
+  const tipoCliente = document.getElementById('tipoCliente').value.trim();
+  const transporteCliente = document.getElementById('transporteCliente').value.trim();
+  if (!idCliente || !nombreCliente || isNaN(latCliente) || isNaN(lonCliente) || isNaN(alturaCliente)) {
+    alert('Completa todos los datos del cliente.');
+    return;
+  }
+  const distancia = calcularDistancia(base.latBase, base.lonBase, latCliente, lonCliente);
+
+  // Calcula factibilidad
+  const fact = analizarFactibilidadPtMP(
+    distancia,
+    base.alturaBase,
+    alturaCliente,
+    base.tipoBase,
+    tipoCliente,
+    false // No sabemos si hay obstrucción aquí, solo para tabla
+  );
+
+  base.clientes.push({
+    idCliente,
+    nombreCliente,
+    latCliente,
+    lonCliente,
+    alturaCliente,
+    tipoCliente,
+    transporteCliente,
+    distancia: distancia.toFixed(2),
+    factibilidad: fact.estado,
+    badge: fact.badge
+  });
+
+  guardarDatosEnLocalStorage();
+  renderTablaClientes();
+  mostrarMapaPtMP();
+  limpiarClienteConDefault();
+}
+const iconBase = L.divIcon({
+  html: `<svg width="38" height="38" viewBox="0 0 38 38"><circle cx="19" cy="19" r="18" fill="#00e6ff" stroke="#fff" stroke-width="2"/><path d="M19 8v22M8 19h22" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`,
+  className: '',
+  iconSize: [38, 38],
+  iconAnchor: [19, 19]
+});
+const iconCliente = L.divIcon({
+  html: `<svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#10b981" stroke="#fff" stroke-width="2"/><circle cx="16" cy="16" r="6" fill="#fff" stroke="#10b981" stroke-width="2"/></svg>`,
+  className: '',
+  iconSize: [32, 32],
+  iconAnchor: [16, 16]
+});
+
+function renderTablaClientes() {
+  const tbody = document.getElementById('tablaClientes').querySelector('tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  if (window.baseSeleccionada === null) return;
+
+  const base = window.bases[window.baseSeleccionada];
+  if (!base || !base.clientes) return;
+
+  base.clientes.forEach((c, idx) => {
+    const fila = document.createElement('tr');
+    let badgeHTML = '';
+    if ((c.tipoCliente || '').toUpperCase() === 'E6-ST18') {
+      badgeHTML = `<span style="background:#00e6ff;color:#181f2a;font-size:0.85em;padding:2px 8px;border-radius:8px;margin-left:6px;font-weight:700;">E6-ST18</span>`;
+    }
+
+    fila.innerHTML = `
+      <td>${c.idCliente}</td>
+      <td>
+        <span style="cursor:pointer;color:#00e6ff;text-decoration:underline;" onclick="event.stopPropagation();mostrarModalResultadosPtMP(window.bases[window.baseSeleccionada], window.bases[window.baseSeleccionada].clientes[${idx}])">
+          ${c.nombreCliente}
+        </span> ${badgeHTML}
+      </td>
+      <td>${c.latCliente}</td>
+      <td>${c.lonCliente}</td>
+      <td>${c.alturaCliente}</td>
+      <td>${c.tipoCliente}</td>
+      <td>${c.transporteCliente}</td>
+      <td>${c.distancia}</td>
+      <td><span class="${c.badge}">${c.factibilidad}</span></td>
+      <td>
+        <button class="btn" style="padding:4px 10px;font-size:0.95em;background:#ef4444;color:#fff;" onclick="event.stopPropagation();eliminarCliente(${idx})">Eliminar</button>
+      </td>
+      <td>
+        <button class="btn" style="padding:4px 10px;font-size:0.95em;background:#b4ec51;color:#232933;" onclick="event.stopPropagation();mostrarReporteDetallado(${idx})">Detailed performance report</button>
+      </td>
+    `;
+
+    fila.style.cursor = 'pointer';
+    fila.onclick = () => {
+      const frecuencia = base.frecuenciaBase || 5.8;
+      const datos = {
+        idA: base.idBase,
+        nombreA: base.nombreBase,
+        latA: base.latBase,
+        lonA: base.lonBase,
+        alturaA: base.alturaBase,
+        idB: c.idCliente,
+        nombreB: c.nombreCliente,
+        latB: parseFloat(c.latCliente),
+        lonB: parseFloat(c.lonCliente),
+        alturaB: parseFloat(c.alturaCliente),
+        frecuencia: frecuencia
+      };
+      mostrarPerfilElevacionDesdeDatos(datos, true);
+    };
+
+    tbody.appendChild(fila);
+  });
+}
+function eliminarCliente(idx) {
+  if (window.baseSeleccionada === null) return;
+  if (!confirm('¿Seguro que deseas eliminar este cliente?')) return;
+  window.bases[window.baseSeleccionada].clientes.splice(idx, 1);
+  guardarDatosEnLocalStorage();
+  renderTablaClientes();
+  mostrarMapaPtMP();
+}
+
+// Mapa
+let map, capaClientes;
+function mostrarMapaPtMP() {
+  if (window.baseSeleccionada === null) {
+    document.getElementById('ptmp-mapa').innerHTML = '<div style="color:#888;text-align:center;padding:40px;">Selecciona o crea una base para ver el mapa.</div>';
+    if (map) { map.remove(); map = null; }
+    return;
+  }
+  const base = window.bases[window.baseSeleccionada];
+  const latBase = base.latBase;
+  const lonBase = base.lonBase;
+  const nombreBase = base.nombreBase;
+  const clientes = base.clientes;
+
+  if (isNaN(latBase) || isNaN(lonBase)) {
+    document.getElementById('ptmp-mapa').innerHTML = '<div style="color:#888;text-align:center;padding:40px;">Ingresa los datos de la base para ver el mapa.</div>';
+    if (map) { map.remove(); map = null; }
+    return;
+  }
+  if (map) {
+    map.remove();
+    map = null;
+  }
+  map = L.map('ptmp-mapa').setView([latBase, lonBase], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  capaClientes = L.layerGroup().addTo(map);
+
+  L.marker([latBase, lonBase], {icon: iconBase})
+    .addTo(capaClientes)
+    .bindTooltip(`<b>Radio Base</b><br>${nombreBase}`, {permanent: false, direction: 'top'});
+
+  clientes.forEach(c => {
+    const lat = parseFloat(c.latCliente);
+    const lon = parseFloat(c.lonCliente);
+    if (!isNaN(lat) && !isNaN(lon)) {
+      L.polyline([[latBase, lonBase], [lat, lon]], {color:'#00e6ff', weight:3, opacity:0.7, dashArray:'6 6'}).addTo(capaClientes);
+      L.marker([lat, lon], {icon: iconCliente})
+        .addTo(capaClientes)
+        .bindTooltip(`<b>Cliente:</b> ${c.nombreCliente}<br><b>ID:</b> ${c.idCliente}`, {permanent: false, direction: 'top'});
+    }
+  });
+
+  const puntos = [[latBase, lonBase], ...clientes.map(c => [parseFloat(c.latCliente), parseFloat(c.lonCliente)])];
+  const bounds = L.latLngBounds(puntos.filter(([lat,lon])=>!isNaN(lat)&&!isNaN(lon)));
+  if (bounds.isValid()) map.fitBounds(bounds, {padding:[40,40]});
+}
+async function getElevacionesOpenTopoData(locations) {
+  const chunkSize = 100;
+  let elevaciones = [];
+  for (let i = 0; i < locations.length; i += chunkSize) {
+    const chunk = locations.slice(i, i + chunkSize);
+    const locationsStr = chunk.map(([lat, lon]) => `${lat},${lon}`).join('|');
+    const url = `https://api.opentopodata.org/v1/srtm90m?locations=${locationsStr}`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    if (!data.results || !data.results.length) {
+      throw new Error('No se pudo obtener elevación');
+    }
+    elevaciones = elevaciones.concat(data.results.map(r => r.elevation));
+    await new Promise(res => setTimeout(res, 300));
+  }
+  return elevaciones;
+}
+async function getElevacionesOpenElevation(locations) {
+  const chunkSize = 100;
+  let elevaciones = [];
+  for (let i = 0; i < locations.length; i += chunkSize) {
+    const chunk = locations.slice(i, i + chunkSize);
+    const locationsStr = chunk.map(([lat, lon]) => `${lat},${lon}`).join('|');
+    const url = `https://api.open-elevation.com/api/v1/lookup?locations=${locationsStr}`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    if (!data.results || !data.results.length) {
+      throw new Error('No se pudo obtener elevación');
+    }
+    elevaciones = elevaciones.concat(data.results.map(r => r.elevation));
+    await new Promise(res => setTimeout(res, 300));
+  }
+  return elevaciones;
+}
+let datosPerfilActual = null;
+let idxClientePerfil = null;
+
+async function actualizarPerfilDesdeSliders() {
+  if (!datosPerfilActual) return;
+  const alturaA = parseInt(document.getElementById('sliderAlturaA').value, 10);
+  const alturaB = parseInt(document.getElementById('sliderAlturaB').value, 10);
+  document.getElementById('sliderAlturaAValue').textContent = alturaA + ' m';
+  document.getElementById('sliderAlturaBValue').textContent = alturaB + ' m';
+  datosPerfilActual.alturaA = alturaA;
+  datosPerfilActual.alturaB = alturaB;
+  if (window.baseSeleccionada !== null) {
+    window.bases[window.baseSeleccionada].alturaBase = alturaA;
+    if (idxClientePerfil !== null) {
+      window.bases[window.baseSeleccionada].clientes[idxClientePerfil].alturaCliente = alturaB;
+      renderTablaClientes();
+      guardarDatosEnLocalStorage();
+    }
+  }
+  await mostrarPerfilElevacionDesdeDatos(datosPerfilActual, false);
+}
+async function mostrarPerfilElevacionDesdeDatos(datos, actualizarSliders = true) {
+  const idA = datos.idA || datos['idA'] || '';
+  const nombreA = datos.nombreA || datos['nombreA'] || '';
+  const alturaA = parseFloat(datos.alturaA || datos['Altura Torre A']) || 0;
+  const idB = datos.idB || datos['idB'] || '';
+  const nombreB = datos.nombreB || datos['nombreB'] || '';
+  const alturaB = parseFloat(datos.alturaB || datos['Altura Torre B']) || 0;
+  const latA = parseFloat(datos.latA || datos['Latitud A']);
+  const lonA = parseFloat(datos.lonA || datos['Longitud A']);
+  const latB = parseFloat(datos.latB || datos['Latitud B']);
+  const lonB = parseFloat(datos.lonB || datos['Longitud B']);
+  const frecuenciaGHz = parseFloat(datos.frecuencia || datos['Frecuencia']);
+  const numPuntos = 100;
+
+  document.getElementById('ptmp-bottom-panel').style.display = 'block';
+  document.getElementById('altura-base-value').textContent = alturaA + ' m';
+  document.getElementById('altura-cliente-value').textContent = alturaB + ' m';
+
+  function calcularAzimuth(lat1, lon1, lat2, lon2) {
+    const toRad = deg => deg * Math.PI / 180;
+    const toDeg = rad => rad * 180 / Math.PI;
+    const dLon = toRad(lon2 - lon1);
+    const y = Math.sin(dLon) * Math.cos(toRad(lat2));
+    const x = Math.cos(toRad(lat1)) * Math.sin(toRad(lat2)) -
+              Math.sin(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(dLon);
+    let brng = Math.atan2(y, x);
+    brng = toDeg(brng);
+    return (brng + 360) % 360;
+  }
+  function calcularDistancia(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  }
+
+  const azimuth = (!isNaN(latA) && !isNaN(lonA) && !isNaN(latB) && !isNaN(lonB))
+    ? calcularAzimuth(latA, lonA, latB, lonB).toFixed(1) + '°'
+    : '--';
+  document.getElementById('azimuth-value').textContent = azimuth;
+  document.getElementById('elevacion-value').textContent = '--';
+
+  if (
+    isNaN(latA) || isNaN(lonA) || isNaN(latB) || isNaN(lonB) ||
+    isNaN(alturaA) || isNaN(alturaB) || isNaN(frecuenciaGHz)
+  ) {
+    document.getElementById('perfilElevacionPlotly').innerHTML =
+      '<div style="color:#e53935;padding:30px;text-align:center;">Datos insuficientes para generar el perfil de elevación.</div>';
+    document.getElementById('ptmp-bottom-pathinfo').textContent = 'Path profile: --';
+    return;
+  }
+  const puntos = [];
+  for (let i = 0; i < numPuntos; i++) {
+    const lat = latA + (latB - latA) * (i / (numPuntos - 1));
+    const lon = lonA + (lonB - lonA) * (i / (numPuntos - 1));
+    puntos.push([lat, lon]);
+  }
+
+  try {
+const elevaciones = await getElevacionesConRespaldo(puntos);
+
+    const distanciaKm = calcularDistancia(latA, lonA, latB, lonB);
+    const h1 = elevaciones[0] + alturaA;
+    const h2 = elevaciones[elevaciones.length - 1] + alturaB;
+    const lineaVista = elevaciones.map((_, i) =>
+      h1 + (h2 - h1) * (i / (numPuntos - 1))
+    );
+  const c = 299792458; // velocidad de la luz (m/s)
+const frecuenciaHz = frecuenciaGHz * 1e9;
+const lambda = c / frecuenciaHz;
+const n = 1; // primera zona de Fresnel
+
+let fresnelSup = [], fresnelInf = [];
+for (let i = 0; i < numPuntos; i++) {
+  const d1 = distanciaKm * 1000 * (i / (numPuntos - 1));
+  const d2 = distanciaKm * 1000 - d1;
+  let F = 0;
+  if (d1 + d2 > 0) {
+    F = Math.sqrt((n * lambda * d1 * d2) / (d1 + d2));
+  }
+  // 60% de la zona de Fresnel
+  fresnelSup.push(lineaVista[i] + 0.6 * F);
+  fresnelInf.push(lineaVista[i] - 0.6 * F);
+}
+let fresnelObstruido = false;
+for (let i = 0; i < elevaciones.length; i++) {
+  if (elevaciones[i] > fresnelInf[i] - 1) { // margen de 1 metro
+    fresnelObstruido = true;
+    break;
+  }
+}
+if (datos.idB) {
+  if (fresnelObstruido) {
+    marcarClienteNoFactible(datos.idB);
+  } else {
+    marcarClienteFactible(datos.idB);
+  }
+}
+    const distancias = elevaciones.map((_, i) => +(distanciaKm * i / (numPuntos - 1)).toFixed(3));
+    const torreA = {
+      x: [0, 0],
+      y: [elevaciones[0], elevaciones[0] + alturaA],
+      name: `Torre A (${alturaA} m)`,
+      mode: 'lines+markers',
+      line: { color: '#00e6ff', width: 6 },
+      marker: { size: 10, color: '#00e6ff' },
+      showlegend: true
+    };
+    const torreB = {
+      x: [distanciaKm, distanciaKm],
+      y: [elevaciones[elevaciones.length - 1], elevaciones[elevaciones.length - 1] + alturaB],
+      name: `Torre B (${alturaB} m)`,
+      mode: 'lines+markers',
+      line: { color: '#e53935', width: 6 },
+      marker: { size: 10, color: '#e53935' },
+      showlegend: true
+    };
+    const minElev = Math.min(...elevaciones);
+    const maxElev = Math.max(...elevaciones);
+const margen = Math.max(20, (maxElev - minElev) * 0.7); // margen mayor para resaltar el relieve
+
+
+const yaxisRange = [minElev - margen, maxElev + margen];
+    Plotly.newPlot('perfilElevacionPlotly', [
+     {
+       x: distancias,
+       y: elevaciones,
+       name: 'Terreno',
+       type: 'scatter',
+       mode: 'lines',
+       fill: 'tozeroy',
+       fillcolor: 'rgba(160, 110, 60, 0.35)', // marrón claro, más natural
+       line: { shape: 'spline', color: '#8d5524', width: 2.5 }, // marrón oscuro
+       hovertemplate: 'Distancia: %{x:.2f} km<br>Elevación: %{y:.0f} m<extra></extra>'
+    },
+      {
+        ...torreA,
+        line: { color: '#00e676', width: 6 },
+        marker: { size: 10, color: '#00e676' }
+      },
+      {
+        ...torreB,
+        line: { color: '#2979ff', width: 6 },
+        marker: { size: 10, color: '#2979ff' }
+      },
+      {
+        x: distancias,
+        y: lineaVista,
+        name: 'Línea de Vista',
+        type: 'scatter',
+        mode: 'lines',
+        line: { color: '#b4ec51', width: 3, dash: 'solid' }
+      },
+      {
+        x: [...distancias, ...distancias.slice().reverse()],
+        y: [...fresnelSup, ...fresnelInf.slice().reverse()],
+        name: 'Zona Fresnel (60%)',
+        type: 'scatter',
+        mode: 'lines',
+        fill: 'toself',
+        fillcolor: 'rgba(180,236,81,0.10)',
+        line: { color: '#b4ec51', width: 1, dash: 'dot' },
+        hoverinfo: 'skip',
+        showlegend: true
+      }
+    ], {
+      title: '',
+      xaxis: {
+        title: '',
+        zeroline: false,
+        gridcolor: '#444',
+        tickfont: { color: '#fff' },
+        showgrid: true,
+        showline: false
+      },
+      yaxis: {
+        title: '',
+        zeroline: false,
+        gridcolor: '#444',
+        tickfont: { color: '#fff' },
+        showgrid: true,
+        showline: false,
+        range: yaxisRange
+      },
+      legend: { orientation: 'h', x: 0.5, xanchor: 'center', y: -0.2, font: { color: '#fff' } },
+      plot_bgcolor: '#232933',
+      paper_bgcolor: '#232933',
+      font: { color: '#fff', family: 'Inter, sans-serif' },
+      margin: { t: 10, l: 40, r: 10, b: 40 },
+      dragmode: 'pan'
+    }, {responsive: true, displayModeBar: false, scrollZoom: true });
+
+    let factibilidad = '';
+    let color = '';
+    if (alturaA > 0 && alturaB > 0) {
+      let obstruido = false;
+      for (let i = 0; i < elevaciones.length; i++) {
+        if (elevaciones[i] > fresnelSup[i]) {
+          obstruido = true;
+          break;
+        }
+      }
+      if (obstruido) {
+        factibilidad = 'Obstruido';
+        color = '#ef4444';
+      } else {
+        factibilidad = 'Clear LoS';
+        color = '#10b981';
+      }
+    } else {
+      factibilidad = 'Requiere análisis';
+      color = '#f59e42';
+    }
+    document.getElementById('ptmp-bottom-pathinfo').innerHTML =
+      `<span style="color:${color};">Path profile: ${factibilidad} (${distanciaKm.toFixed(3)} km)</span>`;
+    if (actualizarSliders) {
+      datosPerfilActual = {...datos};
+      idxClientePerfil = null;
+      if (window.baseSeleccionada !== null && datos.idB) {
+        idxClientePerfil = window.bases[window.baseSeleccionada].clientes.findIndex(
+          c => c.idCliente == datos.idB
+        );
+      }
+      document.getElementById('sliderAlturaA').value = datos.alturaA || datos['Altura Torre A'] || 10;
+      document.getElementById('sliderAlturaB').value = datos.alturaB || datos['Altura Torre B'] || 10;
+      document.getElementById('sliderAlturaAValue').textContent = (datos.alturaA || datos['Altura Torre A'] || 10) + ' m';
+      document.getElementById('sliderAlturaBValue').textContent = (datos.alturaB || datos['Altura Torre B'] || 10) + ' m';
+    }
+
+  } catch (error) {
+  document.getElementById('perfilElevacionPlotly').innerHTML =
+    `<div style="color:#e53935;padding:30px;text-align:center;">Error al consultar OpenTopoData.<br>${error.message || error}</div>`;
+  document.getElementById('ptmp-bottom-pathinfo').textContent = 'Path profile: --';
+}
+}
+async function getElevacionesConRespaldo(locations) {
+  try {
+    return await getElevacionesOpenTopoData(locations);
+  } catch (e) {
+    console.warn('Fallo OpenTopoData, usando Open-Elevation:', e);
+    return await getElevacionesOpenElevation(locations);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('sliderAlturaA').addEventListener('input', actualizarPerfilDesdeSliders);
+  document.getElementById('sliderAlturaB').addEventListener('input', actualizarPerfilDesdeSliders);
+});
+
+document.getElementById('cerrar-panel-ptmp').onclick = function() {
+  document.getElementById('ptmp-bottom-panel').style.display = 'none';
+};
+
+function guardarDatosEnLocalStorage() {
+  localStorage.setItem('fangioBases', JSON.stringify(window.bases));
+  localStorage.setItem('fangioBaseSeleccionada', window.baseSeleccionada);
+}
+function cargarDatosDeLocalStorage() {
+  const bases = localStorage.getItem('fangioBases');
+  if (bases) {
+    window.bases = JSON.parse(bases);
+  }
+  const baseSel = localStorage.getItem('fangioBaseSeleccionada');
+  if (baseSel !== null) {
+    window.baseSeleccionada = baseSel === "null" ? null : Number(baseSel);
+  }
+}
+window.onload = function() {
+  cargarDatosDeLocalStorage();
+  actualizarSelectorBases();
+  renderTablaClientes();
+  mostrarMapaPtMP();
+  limpiarClienteConDefault();
+};
+function mostrarModalResultadosPtMP(base, cliente) {
+  // Info base
+  document.getElementById('modalBaseInfo').innerHTML = `
+    <b>${base.nombreBase}</b> (${base.idBase})<br>
+    Lat: ${base.latBase} | Lon: ${base.lonBase}<br>
+    Altura: ${base.alturaBase} m<br>
+    Tipo: ${base.tipoBase}<br>
+    Transporte: ${base.transporteBase}<br>
+    Frecuencia: ${base.frecuenciaBase} GHz
+  `;
+  // Info cliente
+  document.getElementById('modalClienteInfo').innerHTML = `
+    <b>${cliente.nombreCliente}</b> (${cliente.idCliente})<br>
+    Lat: ${cliente.latCliente} | Lon: ${cliente.lonCliente}<br>
+    Altura: ${cliente.alturaCliente} m<br>
+    Tipo: ${cliente.tipoCliente}<br>
+    Transporte: ${cliente.transporteCliente}
+  `;
+  // Resultados técnicos (puedes calcularlos o traerlos de tu análisis)
+  document.getElementById('modalResultadosTabla').innerHTML = `
+    <table style="width:100%;background:#101a2a;color:#e0f7fa;border-radius:12px;overflow:hidden;">
+      <tr>
+        <th>Distancia (km)</th>
+        <th>Disponibilidad (%)</th>
+        <th>Margen (dB)</th>
+        <th>RSL (dBm)</th>
+        <th>Tipo Enlace</th>
+      </tr>
+      <tr>
+        <td>${cliente.distancia || '--'}</td>
+        <td>100.00</td>
+        <td>45.0</td>
+        <td>-44.5</td>
+        <td>${cliente.tipoCliente || '--'}</td>
+      </tr>
+    </table>
+    <div style="margin-top:18px;">
+      <button class="btn" onclick="cerrarModalResultadosPtMP()">Cerrar</button>
+    </div>
+  `;
+  document.getElementById('modalResultadosPtMP').style.display = 'flex';
+}
+function cerrarModalResultadosPtMP() {
+  document.getElementById('modalResultadosPtMP').style.display = 'none';
+}
+function marcarClienteNoFactible(idCliente) {
+  if (window.baseSeleccionada === null) return;
+  const base = window.bases[window.baseSeleccionada];
+  if (!base || !base.clientes) return;
+  const cliente = base.clientes.find(c => c.idCliente == idCliente);
+  if (cliente) {
+    cliente.factibilidad = 'NO FACTIBLE';
+    cliente.badge = 'badge-nofactible';
+    guardarDatosEnLocalStorage();
+    renderTablaClientes();
+  }
+}
+function marcarClienteFactible(idCliente) {
+  if (window.baseSeleccionada === null) return;
+  const base = window.bases[window.baseSeleccionada];
+  if (!base || !base.clientes) return;
+  const cliente = base.clientes.find(c => c.idCliente == idCliente);
+  if (cliente) {
+    cliente.factibilidad = 'FACTIBLE';
+    cliente.badge = 'badge-factible';
+    guardarDatosEnLocalStorage();
+    renderTablaClientes();
+  }
+}
+const radios = {
+  "E5-BSI": {
+    txPower: 27,
+    rxGain: 16,
+    sensibilidad: { "BPSK": -93, "QAM256": -71 },
+    throughput: { "BPSK": 10.8, "QAM256": 142.8 }
+  },
+  "E5-ST28": {
+    txPower: 28,
+    rxGain: 28,
+    sensibilidad: { "BPSK": -91, "QAM256": -71 },
+    throughput: { "BPSK": 11, "QAM256": 143.8 }
+  },
+  "E6-ST18": {
+    txPower: 25,
+    rxGain: 18,
+    sensibilidad: { "BPSK": -91, "QAM256": -71 },
+    throughput: { "BPSK": 10.8, "QAM256": 142.8 }
+  }
+};
+function mostrarReporteDetallado(idx) {
+  if (window.baseSeleccionada === null) return;
+  const base = window.bases[window.baseSeleccionada];
+  const cliente = base.clientes[idx];
+  const distancia = cliente.distancia || '--';
+  const frecuenciaGHz = 4.9;
+  const distanciaKm = parseFloat(distancia);
+
+  // --- Especificaciones BASE (E5-BSI) ---
+  const txPowerBaseNominal = 27;      // dBm
+  const gananciaBase = 16;            // dBi
+  const umbralRxBase_BPSK = -93;      // dBm
+  const umbralRxBase_QAM256 = -75;    // dBm (ajusta según tu equipo real)
+
+  // --- Detecta modelo de cliente ---
+  let txPowerClienteNominal = 28, gananciaCliente = 28, modeloCliente = "E5-ST28";
+  let umbralRxCliente_BPSK = -91, umbralRxCliente_QAM256 = -75; // dBm (ajusta QAM256 según tu equipo real)
+  const tipoCliente = (cliente.tipoCliente || "").toUpperCase();
+  if (tipoCliente.includes("E6-ST18")) {
+    txPowerClienteNominal = 25;
+    gananciaCliente = 18;
+    modeloCliente = "E6-ST18";
+    umbralRxCliente_BPSK = -91;
+    umbralRxCliente_QAM256 = -75;
+  }
+
+  // --- Aplica límite profesional de potencia TX ---
+  const TX_POWER_LIMIT = 20; // dBm, igual que la herramienta profesional
+  const txPowerBase = Math.min(txPowerBaseNominal, TX_POWER_LIMIT);
+  const txPowerCliente = Math.min(txPowerClienteNominal, TX_POWER_LIMIT);
+
+  // --- Path Loss profesional ---
+  const frecuenciaMHz = frecuenciaGHz * 1000;
+  const pathLoss = 20 * Math.log10(distanciaKm) + 20 * Math.log10(frecuenciaMHz) + 32.44;
+
+  // --- Base → Cliente ---
+  const rslCliente = txPowerBase + gananciaBase + gananciaCliente - pathLoss;
+  const fadeMarginCliente_BPSK = (rslCliente - umbralRxCliente_BPSK).toFixed(1);
+  const fadeMarginCliente_QAM256 = (rslCliente - umbralRxCliente_QAM256).toFixed(1);
+
+  // --- Cliente → Base ---
+  const rslBase = txPowerCliente + gananciaCliente + gananciaBase - pathLoss;
+  const fadeMarginBase_BPSK = (rslBase - umbralRxBase_BPSK).toFixed(1);
+  const fadeMarginBase_QAM256 = (rslBase - umbralRxBase_QAM256).toFixed(1);
+
+  function getDisponibilidad(fadeMargin) {
+    if (fadeMargin > 30) return { avail: '100.00000', outage: '0.3' };
+    if (fadeMargin > 20) return { avail: '99.99', outage: '52.6' };
+    return { avail: '99.9', outage: '526' };
+  }
+  function getThroughput(fadeMargin) {
+    if (fadeMargin > 30) return { t1: '11', t2: '12.5', tMax1: '143.9', tMax2: '156.7' };
+    if (fadeMargin > 20) return { t1: '8', t2: '10', tMax1: '100', tMax2: '120' };
+    return { t1: '2', t2: '3', tMax1: '20', tMax2: '30' };
+  }
+  // Disponibilidad y throughput para cada modulación y sentido
+  const dispCliente_BPSK = getDisponibilidad(fadeMarginCliente_BPSK);
+  const dispCliente_QAM = getDisponibilidad(fadeMarginCliente_QAM256);
+  const thrCliente_BPSK = getThroughput(fadeMarginCliente_BPSK);
+  const thrCliente_QAM = getThroughput(fadeMarginCliente_QAM256);
+
+  const dispBase_BPSK = getDisponibilidad(fadeMarginBase_BPSK);
+  const dispBase_QAM = getDisponibilidad(fadeMarginBase_QAM256);
+  const thrBase_BPSK = getThroughput(fadeMarginBase_BPSK);
+  const thrBase_QAM = getThroughput(fadeMarginBase_QAM256);
+
+  document.getElementById('contenidoReporteDetallado').innerHTML = `
+    <div style="display:flex;gap:32px;justify-content:space-between;">
+      <div style="flex:1;">
+        <div style="font-size:1.2em;color:#b4ec51;font-weight:700;margin-bottom:8px;">
+          <span style="color:#00e6ff">${base.nombreBase}</span> &rarr; <span style="color:#10b981">${cliente.nombreCliente}</span>
+        </div>
+        <div style="margin-bottom:12px;">
+          Channel Width: 20 MHz &nbsp; | &nbsp; Center Frequency: 4.9 GHz &nbsp; | &nbsp; Link distance: ${distancia} km
+        </div>
+        <div style="background:#232933;padding:18px 12px;border-radius:12px;">
+          <div style="font-weight:700;color:#b4ec51;">MAX AVAILABILITY: BPSK 1/2</div>
+          <div>RSL: ${rslCliente.toFixed(1)} dBm; Fade margin: ${fadeMarginCliente_BPSK} dB; Path loss: ${pathLoss.toFixed(1)} dB</div>
+          <table style="width:100%;margin:10px 0;">
+            <tr>
+              <th>Availability, %</th>
+              <th>Outage, sec/year</th>
+              <th>Unidirectional throughput, Mbps</th>
+              <th>Bidirectional throughput, Mbps</th>
+            </tr>
+            <tr>
+              <td>${dispCliente_BPSK.avail}</td>
+              <td>${dispCliente_BPSK.outage}</td>
+              <td>${thrCliente_BPSK.t1}</td>
+              <td>${thrCliente_BPSK.t2}</td>
+            </tr>
+          </table>
+          <div style="font-weight:700;color:#b4ec51;">MAX THROUGHPUT: QAM256 3/4</div>
+          <div>RSL: ${rslCliente.toFixed(1)} dBm; Fade margin: ${fadeMarginCliente_QAM256} dB; Path loss: ${pathLoss.toFixed(1)} dB</div>
+          <table style="width:100%;margin:10px 0;">
+            <tr>
+              <th>Availability, %</th>
+              <th>Outage, sec/year</th>
+              <th>Unidirectional throughput, Mbps</th>
+              <th>Bidirectional throughput, Mbps</th>
+            </tr>
+            <tr>
+              <td>${dispCliente_QAM.avail}</td>
+              <td>${dispCliente_QAM.outage}</td>
+              <td>${thrCliente_QAM.tMax1}</td>
+              <td>${thrCliente_QAM.tMax2}</td>
+            </tr>
+          </table>
+          <div style="margin-top:10px;font-size:0.95em;color:#b2ebf2;">
+            <b>TX (Base E5-BSI):</b><br>
+            Potencia TX: ${txPowerBase} dBm<br>
+            Ganancia antena TX: 16 dBi<br>
+            <b>RX (${modeloCliente}):</b><br>
+            Ganancia antena RX: ${gananciaCliente} dBi<br>
+            Sensibilidad receptor: BPSK: ${umbralRxCliente_BPSK} dBm / QAM256: ${umbralRxCliente_QAM256} dBm<br>
+          </div>
+        </div>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:1.2em;color:#b4ec51;font-weight:700;margin-bottom:8px;">
+          <span style="color:#10b981">${cliente.nombreCliente}</span> &rarr; <span style="color:#00e6ff">${base.nombreBase}</span>
+        </div>
+        <div style="margin-bottom:12px;">
+          Channel Width: 20 MHz &nbsp; | &nbsp; Center Frequency: 4.9 GHz &nbsp; | &nbsp; Link distance: ${distancia} km
+        </div>
+        <div style="background:#232933;padding:18px 12px;border-radius:12px;">
+          <div style="font-weight:700;color:#b4ec51;">MAX AVAILABILITY: BPSK 1/2</div>
+          <div>RSL: ${rslBase.toFixed(1)} dBm; Fade margin: ${fadeMarginBase_BPSK} dB; Path loss: ${pathLoss.toFixed(1)} dB</div>
+          <table style="width:100%;margin:10px 0;">
+            <tr>
+              <th>Availability, %</th>
+              <th>Outage, sec/year</th>
+              <th>Unidirectional throughput, Mbps</th>
+              <th>Bidirectional throughput, Mbps</th>
+            </tr>
+            <tr>
+              <td>${dispBase_BPSK.avail}</td>
+              <td>${dispBase_BPSK.outage}</td>
+              <td>${thrBase_BPSK.t1}</td>
+              <td>${thrBase_BPSK.t2}</td>
+            </tr>
+          </table>
+          <div style="font-weight:700;color:#b4ec51;">MAX THROUGHPUT: QAM256 3/4</div>
+          <div>RSL: ${rslBase.toFixed(1)} dBm; Fade margin: ${fadeMarginBase_QAM256} dB; Path loss: ${pathLoss.toFixed(1)} dB</div>
+          <table style="width:100%;margin:10px 0;">
+            <tr>
+              <th>Availability, %</th>
+              <th>Outage, sec/year</th>
+              <th>Unidirectional throughput, Mbps</th>
+              <th>Bidirectional throughput, Mbps</th>
+            </tr>
+            <tr>
+              <td>${dispBase_QAM.avail}</td>
+              <td>${dispBase_QAM.outage}</td>
+              <td>${thrBase_QAM.tMax1}</td>
+              <td>${thrBase_QAM.tMax2}</td>
+            </tr>
+          </table>
+          <div style="margin-top:10px;font-size:0.95em;color:#b2ebf2;">
+            <b>TX (${modeloCliente}):</b><br>
+            Potencia TX: ${txPowerCliente} dBm<br>
+            Ganancia antena TX: ${gananciaCliente} dBi<br>
+            <b>RX (Base E5-BSI):</b><br>
+            Ganancia antena RX: 16 dBi<br>
+            Sensibilidad receptor: BPSK: ${umbralRxBase_BPSK} dBm / QAM256: ${umbralRxBase_QAM256} dBm<br>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:18px;text-align:right;">
+      <button class="btn" onclick="cerrarModalReporteDetallado()">Cerrar</button>
+    </div>
+  `;
+  document.getElementById('modalReporteDetallado').style.display = 'flex';
+}
+function cerrarModalReporteDetallado() {
+  document.getElementById('modalReporteDetallado').style.display = 'none';
+}
+
+// ===== FUNCIONES ESPECIALIZADAS EN MICROONDAS PARA PTMP =====
+
+// Función para analizar enlaces microondas PtMP usando ITU-R P.530
+function analizarMicroondasPtMP() {
+  if (window.baseSeleccionada === null) {
+    alert('Selecciona una base para analizar.');
+    return;
+  }
+  
+  const base = window.bases[window.baseSeleccionada];
+  const clientes = base.clientes || [];
+  
+  if (clientes.length === 0) {
+    alert('No hay clientes registrados para analizar.');
+    return;
+  }
+  
+  const clima = document.getElementById('clima-ptmp').value;
+  const potenciaTX = parseFloat(document.getElementById('potencia-tx-ptmp').value);
+  const sensibilidadRX = parseFloat(document.getElementById('sensibilidad-rx-ptmp').value);
+  const disponibilidadObjetivo = parseFloat(document.getElementById('disponibilidad-objetivo-ptmp').value);
+  
+  const resultados = [];
+  let enlacesViables = 0;
+  let enlacesCriticos = 0;
+  let disponibilidadTotal = 0;
+  let clientesActivos = 0;
+  
+  clientes.forEach((cliente, index) => {
+    const distancia = parseFloat(cliente.distancia || 0);
+    const frecuencia = parseFloat(base.frecuenciaBase || 4.9);
+    const alturaBase = parseFloat(base.alturaBase || 30);
+    const alturaCliente = parseFloat(cliente.alturaCliente || 10);
+    
+    if (distancia > 0 && frecuencia > 0) {
+      // Calcular path loss usando ITU-R P.530
+      const pathLoss = calcularPathLossMicroondasPtMP(distancia, frecuencia, alturaBase, alturaCliente, clima);
+      
+      // Calcular margen de fading
+      const fadeMargin = calcularMargenFadingMicroondasPtMP(distancia, frecuencia, clima);
+      
+      // Calcular disponibilidad real
+      const disponibilidadReal = calcularDisponibilidadRealPtMP(distancia, frecuencia, clima, fadeMargin);
+      
+      // Calcular potencia recibida
+      const potenciaRecibida = potenciaTX - pathLoss;
+      
+      // Calcular margen total
+      const margenTotal = potenciaRecibida - sensibilidadRX - fadeMargin;
+      
+      // Evaluar estado del enlace
+      let estado = 'Crítico';
+      let estadoColor = '#ef4444';
+      
+      if (margenTotal > 15 && disponibilidadReal >= disponibilidadObjetivo) {
+        estado = 'Excelente';
+        estadoColor = '#10b981';
+        enlacesViables++;
+        clientesActivos++;
+      } else if (margenTotal > 8 && disponibilidadReal >= 99.5) {
+        estado = 'Bueno';
+        estadoColor = '#3b82f6';
+        enlacesViables++;
+        clientesActivos++;
+      } else if (margenTotal > 0) {
+        estado = 'Aceptable';
+        estadoColor = '#f59e0b';
+        enlacesViables++;
+        clientesActivos++;
+      } else {
+        enlacesCriticos++;
+      }
+      
+      resultados.push({
+        cliente: cliente.nombreCliente || `Cliente ${index + 1}`,
+        distancia: distancia.toFixed(2),
+        frecuencia: frecuencia.toFixed(1),
+        pathLoss: pathLoss.toFixed(2),
+        margen: margenTotal.toFixed(2),
+        disponibilidad: disponibilidadReal.toFixed(3),
+        estado: estado,
+        estadoColor: estadoColor
+      });
+      
+      disponibilidadTotal += disponibilidadReal;
+    }
+  });
+  
+  // Actualizar estadísticas
+  document.getElementById('enlaces-viables-ptmp').textContent = enlacesViables;
+  document.getElementById('enlaces-criticos-ptmp').textContent = enlacesCriticos;
+  document.getElementById('disponibilidad-promedio-ptmp').textContent = 
+    resultados.length > 0 ? (disponibilidadTotal / resultados.length).toFixed(3) + '%' : '0%';
+  document.getElementById('clientes-activos-ptmp').textContent = clientesActivos;
+  
+  // Actualizar tabla
+  const tbody = document.getElementById('tbody-analisis-ptmp');
+  tbody.innerHTML = '';
+  
+  resultados.forEach(resultado => {
+    const row = tbody.insertRow();
+    row.innerHTML = `
+      <td style="padding: 12px; border-bottom: 1px solid rgba(0, 230, 255, 0.1);">${resultado.cliente}</td>
+      <td style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(0, 230, 255, 0.1);">${resultado.distancia}</td>
+      <td style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(0, 230, 255, 0.1);">${resultado.frecuencia}</td>
+      <td style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(0, 230, 255, 0.1);">${resultado.pathLoss}</td>
+      <td style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(0, 230, 255, 0.1);">${resultado.margen}</td>
+      <td style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(0, 230, 255, 0.1);">${resultado.disponibilidad}</td>
+      <td style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(0, 230, 255, 0.1);">
+        <span style="color: ${resultado.estadoColor}; font-weight: 600;">${resultado.estado}</span>
+      </td>
+    `;
+  });
+  
+  // Mostrar resultados
+  document.getElementById('resultados-microondas-ptmp').style.display = 'block';
+  
+  // Mostrar notificación
+  alert(`Análisis PtMP completado: ${enlacesViables} enlaces viables, ${enlacesCriticos} críticos`);
+}
+
+// Función para calcular path loss según ITU-R P.530 para PtMP
+function calcularPathLossMicroondasPtMP(distancia, frecuencia, alturaBase, alturaCliente, clima) {
+  // Path loss básico en espacio libre
+  const Lfs = 92.45 + 20 * Math.log10(distancia) + 20 * Math.log10(frecuencia);
+  
+  // Factores de clima según ITU-R P.530 (ajustados para PtMP)
+  const factoresClima = {
+    tropical: { rain: 0.12, humidity: 0.06, temperature: 0.04 },
+    temperate: { rain: 0.08, humidity: 0.04, temperature: 0.02 },
+    arid: { rain: 0.04, humidity: 0.02, temperature: 0.06 },
+    cold: { rain: 0.06, humidity: 0.03, temperature: 0.10 }
+  };
+  
+  const factor = factoresClima[clima] || factoresClima.temperate;
+  
+  // Pérdidas adicionales por clima
+  const Lclima = distancia * (factor.rain + factor.humidity + factor.temperature);
+  
+  // Pérdidas por altura de antenas (específico para PtMP)
+  const Laltura = Math.max(0, 15 * Math.log10(Math.min(alturaBase, alturaCliente) / 25));
+  
+  return Lfs + Lclima - Laltura;
+}
+
+// Función para calcular margen de fading para PtMP
+function calcularMargenFadingMicroondasPtMP(distancia, frecuencia, clima) {
+  // Fade margin según ITU-R P.530 (ajustado para PtMP)
+  const fadeFactors = {
+    tropical: 0.10,
+    temperate: 0.06,
+    arid: 0.04,
+    cold: 0.08
+  };
+  
+  const factor = fadeFactors[clima] || fadeFactors.temperate;
+  return distancia * frecuencia * factor;
+}
+
+// Función para calcular disponibilidad real para PtMP
+function calcularDisponibilidadRealPtMP(distancia, frecuencia, clima, fadeMargin) {
+  // Disponibilidad base según ITU-R P.530 (ajustada para PtMP)
+  const disponibilidadBase = 99.5;
+  
+  // Reducción por clima y distancia (menor que PtP)
+  const reduccionClima = {
+    tropical: 0.04,
+    temperate: 0.02,
+    arid: 0.01,
+    cold: 0.03
+  };
+  
+  const factor = reduccionClima[clima] || reduccionClima.temperate;
+  const reduccion = distancia * frecuencia * factor;
+  
+  return Math.max(99.0, disponibilidadBase - reduccion);
+}
+
+</script>
+<div id="modalResultadosPtMP" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(8,20,33,0.92); z-index:99999; align-items:center; justify-content:center;">
+  <div style="background:#181f2a; border-radius:18px; max-width:900px; width:96vw; margin:40px auto; box-shadow:0 8px 48px #00e6ff99; padding:32px 24px 24px 24px; position:relative;">
+    <button onclick="cerrarModalResultadosPtMP()" style="position:absolute;top:16px;right:18px;font-size:2rem;background:transparent;border:none;color:#00e6ff;cursor:pointer;">&times;</button>
+    <div style="display:flex; gap:32px; justify-content:space-between; align-items:flex-start;">
+      <div style="flex:1;">
+        <h3 style="color:#00e6ff; margin-bottom:8px;">Estación Base</h3>
+        <div id="modalBaseInfo"></div>
+      </div>
+      <div style="flex:1;">
+        <h3 style="color:#10b981; margin-bottom:8px;">Cliente</h3>
+        <div id="modalClienteInfo"></div>
+      </div>
+    </div>
+    <hr style="margin:24px 0;">
+    <div id="modalResultadosTabla"></div>
+  </div>
+</div> 
+<div id="modalReporteDetallado" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(8,20,33,0.92); z-index:99999; align-items:center; justify-content:center;">
+  <div style="background:#181f2a; border-radius:18px; max-width:900px; width:96vw; margin:40px auto; box-shadow:0 8px 48px #b4ec51aa; padding:32px 24px 24px 24px; position:relative;">
+    <button onclick="cerrarModalReporteDetallado()" style="position:absolute;top:16px;right:18px;font-size:2rem;background:transparent;border:none;color:#b4ec51;cursor:pointer;">&times;</button>
+    <div id="contenidoReporteDetallado"></div>
+  </div>
+</div>
+
+</body>
+</html>

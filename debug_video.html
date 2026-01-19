@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico de Video - Fangio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+        
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .test-video {
+            width: 100%;
+            height: 200px;
+            background: #333;
+            border-radius: 10px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -3;
+            opacity: 0.3;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            color: #4ade80;
+        }
+        
+        .status.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #f87171;
+        }
+        
+        .status.info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            color: #60a5fa;
+        }
+        
+        pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Diagnóstico de Video Background</h1>
+        
+        <div class="test-section">
+            <h3>1. Video de Prueba Local</h3>
+            <p>Este video debería funcionar si tu navegador soporta video:</p>
+            <video class="test-video" controls>
+                <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
+                Tu navegador no soporta el elemento video.
+            </video>
+            <div id="video-status" class="status info">Verificando soporte de video...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>2. Video Background (como en login.html)</h3>
+            <p>Este es el mismo video que debería aparecer en login.html:</p>
+            <video class="video-bg" autoplay muted loop id="background-video">
+                <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
+                <!-- Fallback para navegadores que no soportan video -->
+            </video>
+            <div id="bg-video-status" class="status info">Verificando video de fondo...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. Información del Navegador</h3>
+            <div id="browser-info" class="status info">Obteniendo información del navegador...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>4. Diagnóstico de CSS</h3>
+            <button class="btn" onclick="diagnosticarCSS()">Diagnosticar CSS</button>
+            <div id="css-status" class="status info">Haz clic en el botón para diagnosticar CSS</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>5. URLs de Video Alternativas</h3>
+            <button class="btn" onclick="probarVideoAlternativo(1)">Probar Video 1</button>
+            <button class="btn" onclick="probarVideoAlternativo(2)">Probar Video 2</button>
+            <button class="btn" onclick="probarVideoAlternativo(3)">Probar Video 3</button>
+            <div id="alt-video-status" class="status info">Prueba diferentes URLs de video</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>6. Logs de Diagnóstico</h3>
+            <button class="btn" onclick="limpiarLogs()">Limpiar Logs</button>
+            <pre id="diagnostic-logs">Iniciando diagnóstico...</pre>
+        </div>
+    </div>
+
+    <script>
+        // URLs de video alternativas
+        const videoUrls = [
+            'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+            'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
+        ];
+        
+        function log(message) {
+            const logs = document.getElementById('diagnostic-logs');
+            const timestamp = new Date().toLocaleTimeString();
+            logs.textContent += `\n[${timestamp}] ${message}`;
+            console.log(`[${timestamp}] ${message}`);
+        }
+        
+        function limpiarLogs() {
+            document.getElementById('diagnostic-logs').textContent = 'Logs limpiados...';
+        }
+        
+        // Verificar soporte de video
+        function verificarSoporteVideo() {
+            const video = document.querySelector('.test-video');
+            const status = document.getElementById('video-status');
+            
+            if (video.canPlayType) {
+                const canPlayMP4 = video.canPlayType('video/mp4');
+                if (canPlayMP4 === 'probably' || canPlayMP4 === 'maybe') {
+                    status.className = 'status success';
+                    status.textContent = '✅ Soporte de video MP4: OK';
+                    log('Soporte de video MP4: OK');
+                } else {
+                    status.className = 'status error';
+                    status.textContent = '❌ Soporte de video MP4: No disponible';
+                    log('Soporte de video MP4: No disponible');
+                }
+            } else {
+                status.className = 'status error';
+                status.textContent = '❌ API de video no disponible';
+                log('API de video no disponible');
+            }
+        }
+        
+        // Verificar video de fondo
+        function verificarVideoFondo() {
+            const video = document.getElementById('background-video');
+            const status = document.getElementById('bg-video-status');
+            
+            video.addEventListener('loadstart', () => {
+                log('Video de fondo: Iniciando carga');
+            });
+            
+            video.addEventListener('loadeddata', () => {
+                status.className = 'status success';
+                status.textContent = '✅ Video de fondo cargado correctamente';
+                log('Video de fondo cargado correctamente');
+            });
+            
+            video.addEventListener('error', (e) => {
+                status.className = 'status error';
+                status.textContent = '❌ Error al cargar video de fondo';
+                log(`Error al cargar video de fondo: ${e.message}`);
+            });
+            
+            video.addEventListener('play', () => {
+                log('Video de fondo: Reproduciendo');
+            });
+            
+            // Verificar si el video está reproduciéndose después de 3 segundos
+            setTimeout(() => {
+                if (!video.paused) {
+                    log('Video de fondo: Reproducción confirmada');
+                } else {
+                    log('Video de fondo: No se está reproduciendo automáticamente');
+                }
+            }, 3000);
+        }
+        
+        // Información del navegador
+        function obtenerInfoNavegador() {
+            const info = document.getElementById('browser-info');
+            const userAgent = navigator.userAgent;
+            const vendor = navigator.vendor;
+            const platform = navigator.platform;
+            
+            info.innerHTML = `
+                <strong>Navegador:</strong> ${userAgent}<br>
+                <strong>Vendor:</strong> ${vendor}<br>
+                <strong>Plataforma:</strong> ${platform}<br>
+                <strong>Cookies habilitadas:</strong> ${navigator.cookieEnabled ? 'Sí' : 'No'}<br>
+                <strong>JavaScript habilitado:</strong> Sí
+            `;
+            
+            log(`Navegador: ${userAgent}`);
+            log(`Vendor: ${vendor}`);
+            log(`Plataforma: ${platform}`);
+        }
+        
+        // Diagnosticar CSS
+        function diagnosticarCSS() {
+            const video = document.getElementById('background-video');
+            const status = document.getElementById('css-status');
+            
+            if (video) {
+                const styles = window.getComputedStyle(video);
+                const position = styles.position;
+                const zIndex = styles.zIndex;
+                const opacity = styles.opacity;
+                const width = styles.width;
+                const height = styles.height;
+                
+                status.innerHTML = `
+                    <strong>CSS del video:</strong><br>
+                    Position: ${position}<br>
+                    Z-index: ${zIndex}<br>
+                    Opacity: ${opacity}<br>
+                    Width: ${width}<br>
+                    Height: ${height}
+                `;
+                
+                log(`CSS - Position: ${position}, Z-index: ${zIndex}, Opacity: ${opacity}`);
+                
+                if (position === 'fixed' && zIndex === '-3') {
+                    status.className = 'status success';
+                    status.innerHTML += '<br>✅ Estilos CSS correctos';
+                } else {
+                    status.className = 'status error';
+                    status.innerHTML += '<br>❌ Estilos CSS incorrectos';
+                }
+            } else {
+                status.className = 'status error';
+                status.textContent = '❌ Elemento video no encontrado';
+                log('Elemento video no encontrado en el DOM');
+            }
+        }
+        
+        // Probar video alternativo
+        function probarVideoAlternativo(index) {
+            const video = document.getElementById('background-video');
+            const status = document.getElementById('alt-video-status');
+            const url = videoUrls[index - 1];
+            
+            log(`Probando video alternativo ${index}: ${url}`);
+            status.textContent = `Probando video ${index}...`;
+            
+            video.src = url;
+            video.load();
+            
+            video.addEventListener('loadeddata', () => {
+                status.className = 'status success';
+                status.textContent = `✅ Video ${index} cargado correctamente`;
+                log(`Video ${index} cargado correctamente`);
+            });
+            
+            video.addEventListener('error', () => {
+                status.className = 'status error';
+                status.textContent = `❌ Error al cargar video ${index}`;
+                log(`Error al cargar video ${index}`);
+            });
+        }
+        
+        // Inicializar diagnóstico
+        window.addEventListener('load', () => {
+            log('Iniciando diagnóstico de video...');
+            verificarSoporteVideo();
+            verificarVideoFondo();
+            obtenerInfoNavegador();
+            
+            // Verificar si el video está visible
+            setTimeout(() => {
+                const video = document.getElementById('background-video');
+                if (video) {
+                    const rect = video.getBoundingClientRect();
+                    log(`Dimensiones del video: ${rect.width}x${rect.height}`);
+                    log(`Posición: top=${rect.top}, left=${rect.left}`);
+                    
+                    if (rect.width > 0 && rect.height > 0) {
+                        log('Video tiene dimensiones válidas');
+                    } else {
+                        log('Video tiene dimensiones cero - posible problema de CSS');
+                    }
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html> 

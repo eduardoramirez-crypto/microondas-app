@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fangio Telecom - Enterprise PtMP Link Management System</title>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script src="config.js"></script>
+  <style>
+    /* Enterprise Design System */
+    :root {
+        --primary-color: #1e40af;
+        --primary-dark: #1e3a8a;
+        --primary-light: #3b82f6;
+        --secondary-color: #7c3aed;
+        --secondary-dark: #5b21b6;
+        --accent-color: #059669;
+        --accent-light: #10b981;
+        --warning-color: #d97706;
+        --danger-color: #dc2626;
+        --success-color: #16a34a;
+        --info-color: #0891b2;
+        
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --text-muted: #9ca3af;
+        
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9fafb;
+        --bg-tertiary: #f3f4f6;
+        --bg-dark: #111827;
+        --bg-card: #ffffff;
+        
+        --border-color: #e5e7eb;
+        --border-light: #f3f4f6;
+        --border-dark: #d1d5db;
+        
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        
+        --radius-sm: 0.375rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+        --radius-2xl: 1.5rem;
+        
+        --spacing-xs: 0.25rem;
+        --spacing-sm: 0.5rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 1.5rem;
+        --spacing-xl: 2rem;
+        --spacing-2xl: 3rem;
+        --spacing-3xl: 4rem;
+    }
+
+    /* Reset and Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    /* Enterprise Header */
+    .enterprise-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+        padding: var(--spacing-3xl) var(--spacing-2xl);
+        position: relative;
+        overflow: hidden;
+        margin-bottom: var(--spacing-3xl);
+    }
+
+    .enterprise-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 2;
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .enterprise-header h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: var(--spacing-lg);
+        letter-spacing: -0.025em;
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .enterprise-header p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        font-weight: 500;
+        margin-bottom: var(--spacing-xl);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .enterprise-badges {
+        display: flex;
+        gap: var(--spacing-md);
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .enterprise-badge {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: var(--spacing-md) var(--spacing-lg);
+        border-radius: var(--radius-xl);
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+    }
+
+    .enterprise-badge:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+    }
+
+    /* Navigation */
+    .enterprise-nav {
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-2xl);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 70px;
+    }
+
+    .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: var(--primary-color);
+    }
+
+    .nav-logo i {
+        font-size: 1.5rem;
+    }
+
+    .nav-tabs {
+        display: flex;
+        gap: var(--spacing-sm);
+    }
+
+    .nav-tab {
+        padding: var(--spacing-md) var(--spacing-lg);
+        border: none;
+        background: transparent;
+        color: var(--text-secondary);
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: var(--radius-lg);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .nav-tab:hover {
+        color: var(--primary-color);
+        background: var(--bg-tertiary);
+    }
+
+    .nav-tab.active {
+        color: var(--primary-color);
+        background: var(--primary-color);
+        color: white;
+    }
+
+    /* Main Container */
+    .enterprise-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-2xl);
+    }
+
+    /* Enterprise Cards */
+    .enterprise-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-2xl);
+        margin-bottom: var(--spacing-2xl);
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+    }
+
+    .enterprise-card:hover {
+        box-shadow: var(--shadow-xl);
+        transform: translateY(-2px);
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-xl);
+        padding-bottom: var(--spacing-lg);
+        border-bottom: 2px solid var(--border-light);
+    }
+
+    .card-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .card-subtitle {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin-top: var(--spacing-xs);
+    }
+
+    /* Form Grid */
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-sm);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .form-control {
+        padding: var(--spacing-md);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: var(--bg-primary);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+    }
+
+    /* Enterprise Buttons */
+    .btn {
+        padding: var(--spacing-md) var(--spacing-lg);
+        border: none;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, var(--success-color), var(--accent-light));
+        color: white;
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, var(--warning-color), #f59e0b);
+        color: white;
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, var(--danger-color), #ef4444);
+        color: white;
+    }
+
+    .btn-info {
+        background: linear-gradient(135deg, var(--info-color), #06b6d4);
+        color: white;
+    }
+
+    /* Action Bar */
+    .action-bar {
+        display: flex;
+        gap: var(--spacing-md);
+        flex-wrap: wrap;
+        margin-top: var(--spacing-lg);
+        padding-top: var(--spacing-lg);
+        border-top: 1px solid var(--border-light);
+    }
+
+    /* Enterprise Table */
+    .enterprise-table {
+        background: var(--bg-primary);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+    }
+
+    .table-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        padding: var(--spacing-lg);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.875rem;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .enterprise-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .enterprise-table th {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        padding: var(--spacing-md);
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .enterprise-table td {
+        padding: var(--spacing-md);
+        border-bottom: 1px solid var(--border-light);
+        color: var(--text-primary);
+    }
+
+    .enterprise-table tr:hover {
+        background: var(--bg-secondary);
+    }
+
+    /* Status Badges */
+    .status-badge {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .status-success {
+        background: var(--success-color);
+        color: white;
+    }
+
+    .status-warning {
+        background: var(--warning-color);
+        color: white;
+    }
+
+    .status-danger {
+        background: var(--danger-color);
+        color: white;
+    }
+
+    .status-info {
+        background: var(--info-color);
+        color: white;
+    }
+
+    /* Analysis Panel */
+    .analysis-panel {
+        background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-2xl);
+        margin: var(--spacing-2xl) 0;
+    }
+
+    .analysis-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--spacing-lg);
+        margin: var(--spacing-xl) 0;
+    }
+
+    .analysis-card {
+        background: var(--bg-primary);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        text-align: center;
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .analysis-number {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--primary-color);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .analysis-label {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* Map Container */
+    .map-container {
+        background: var(--bg-primary);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        margin: var(--spacing-2xl) 0;
+    }
+
+    .map-header {
+        background: var(--bg-tertiary);
+        padding: var(--spacing-lg);
+        border-bottom: 1px solid var(--border-color);
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    #ptmp-mapa {
+        width: 100%;
+        height: 500px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .enterprise-container {
+            padding: 0 var(--spacing-lg);
+        }
+        
+        .nav-container {
+            padding: 0 var(--spacing-lg);
+        }
+        
+        .enterprise-header {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+        
+        .enterprise-header h1 {
+            font-size: 2.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .analysis-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .nav-tabs {
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+        
+        .enterprise-header h1 {
+            font-size: 2rem;
+        }
+        
+        .enterprise-badges {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    /* Utility Classes */
+    .text-center { text-align: center; }
+    .text-left { text-align: left; }
+    .text-right { text-align: right; }
+    
+    .mb-0 { margin-bottom: 0; }
+    .mb-1 { margin-bottom: var(--spacing-sm); }
+    .mb-2 { margin-bottom: var(--spacing-md); }
+    .mb-3 { margin-bottom: var(--spacing-lg); }
+    .mb-4 { margin-bottom: var(--spacing-xl); }
+    
+    .mt-0 { margin-top: 0; }
+    .mt-1 { margin-top: var(--spacing-sm); }
+    .mt-2 { margin-top: var(--spacing-md); }
+    .mt-3 { margin-top: var(--spacing-lg); }
+    .mt-4 { margin-top: var(--spacing-xl); }
+
+    /* Loading States */
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid var(--border-color);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .toast {
+        background: var(--bg-primary);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-md) var(--spacing-lg);
+        box-shadow: var(--shadow-xl);
+        border: 1px solid var(--border-color);
+        animation: slideInRight 0.3s ease;
+        max-width: 400px;
+        color: var(--text-primary);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 300px;
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
+    }
+    
+    .toast.show {
+        transform: translateX(0);
+    }
+    
+    .toast.success {
+        border-left: 4px solid var(--success-color);
+        background: linear-gradient(135deg, rgba(22, 163, 74, 0.1), var(--bg-primary));
+    }
+    
+    .toast.error {
+        border-left: 4px solid var(--danger-color);
+        background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), var(--bg-primary));
+    }
+    
+    .toast.info {
+        border-left: 4px solid var(--info-color);
+        background: linear-gradient(135deg, rgba(8, 145, 178, 0.1), var(--bg-primary));
+    }
+    
+    .toast.warning {
+        border-left: 4px solid var(--warning-color);
+        background: linear-gradient(135deg, rgba(217, 119, 6, 0.1), var(--bg-primary));
+    }
+
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    /* Hide video background for enterprise look */
+    .video-bg, .overlay {
+        display: none;
+    }
+
+    /* Enterprise color scheme for existing elements */
+    .badge-factible { 
+        background: var(--success-color); 
+        color: white; 
+        border-radius: var(--radius-sm); 
+        padding: 2px 10px; 
+        font-weight: 700; 
+    }
+    
+    .badge-nofactible { 
+        background: var(--danger-color); 
+        color: white; 
+        border-radius: var(--radius-sm); 
+        padding: 2px 10px; 
+        font-weight: 700; 
+    }
+    
+    .badge-indef { 
+        background: var(--warning-color); 
+        color: white; 
+        border-radius: var(--radius-sm); 
+        padding: 2px 10px; 
+        font-weight: 700; 
+    }
+  </style>
+</head>
+<body> 
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+  
+  <!-- Enterprise Header -->
+  <header class="enterprise-header">
+    <div class="header-content">
+      <h1><i class="fas fa-broadcast-tower"></i> Fangio Telecom</h1>
+      <p>Enterprise Point-to-Multipoint (PtMP) Link Management System</p>
+      <div class="enterprise-badges">
+        <div class="enterprise-badge">
+          <i class="fas fa-satellite-dish"></i> Microwave Analysis
+        </div>
+        <div class="enterprise-badge">
+          <i class="fas fa-network-wired"></i> Professional Grade
+        </div>
+        <div class="enterprise-badge">
+          <i class="fas fa-chart-line"></i> Real-time Monitoring
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Enterprise Navigation -->
+  <nav class="enterprise-nav">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <i class="fas fa-broadcast-tower"></i>
+        <span>Fangio PtMP</span>
+      </div>
+      <div class="nav-tabs">
+        <button onclick="mostrarPestana('clientes')" id="btn-clientes" class="nav-tab active">
+          <i class="fas fa-users"></i> Client Management
+        </button>
+        <button onclick="mostrarPestana('analisis')" id="btn-analisis" class="nav-tab">
+          <i class="fas fa-chart-line"></i> Technical Analysis
+        </button>
+        <button onclick="mostrarPestana('mapa')" id="btn-mapa" class="nav-tab">
+          <i class="fas fa-map"></i> Visualization
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="enterprise-container">
+    <!-- Database Management Panel -->
+    <div class="enterprise-card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-database"></i>
+        </div>
+        <div>
+          <div class="card-title">Database Management</div>
+          <div class="card-subtitle">Manage your PtMP network databases and configurations</div>
+        </div>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr auto; gap: var(--spacing-xl); align-items: end; margin-bottom: var(--spacing-xl);">
+        <div class="form-group">
+          <label for="selectorBase" class="form-label">Select Database</label>
+          <select id="selectorBase" class="form-control" onchange="cambiarBase()">
+            <option value="">-- New Database --</option>
+          </select>
+        </div>
+        
+        <div class="action-bar">
+          <button class="btn btn-primary" onclick="nuevaBase()">
+            <i class="fas fa-plus"></i> New Database
+          </button>
+          <button class="btn btn-success" onclick="guardarBase()">
+            <i class="fas fa-save"></i> Save Database
+          </button>
+          <button class="btn btn-danger" onclick="eliminarBase()">
+            <i class="fas fa-trash"></i> Delete Database
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Base Station Configuration Panel -->
+    <div class="enterprise-card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-broadcast-tower"></i>
+        </div>
+        <div>
+          <div class="card-title">Base Station Configuration</div>
+          <div class="card-subtitle">Configure your PtMP base station parameters</div>
+        </div>
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="idBase" class="form-label">Base ID</label>
+          <input type="text" id="idBase" class="form-control" placeholder="e.g., BASE001" />
+        </div>
+        
+        <div class="form-group">
+          <label for="nombreBase" class="form-label">Base Name</label>
+          <input type="text" id="nombreBase" class="form-control" placeholder="e.g., Main Tower" />
+        </div>
+        
+        <div class="form-group">
+          <label for="latBase" class="form-label">Latitude</label>
+          <input type="text" id="latBase" class="form-control" placeholder="e.g., 19.4326" />
+        </div>
+        
+        <div class="form-group">
+          <label for="lonBase" class="form-label">Longitude</label>
+          <input type="text" id="lonBase" class="form-control" placeholder="e.g., -99.1332" />
+        </div>
+        
+        <div class="form-group">
+          <label for="alturaBase" class="form-label">Base Height (m)</label>
+          <input type="text" id="alturaBase" class="form-control" placeholder="e.g., 30" />
+        </div>
+        
+        <div class="form-group">
+          <label for="tipoBase" class="form-label">Base Tower Type</label>
+          <input type="text" id="tipoBase" class="form-control" placeholder="e.g., E5 BSI" />
+        </div>
+        
+        <div class="form-group">
+          <label for="transporteBase" class="form-label">Base Transport</label>
+          <input type="text" id="transporteBase" class="form-control" placeholder="e.g., Fiber optic" />
+        </div>
+        
+        <div class="form-group">
+          <label for="frecuenciaBase" class="form-label">Frequency (GHz)</label>
+          <input type="text" id="frecuenciaBase" class="form-control" value="4.9" />
+        </div>
+      </div>
+    </div>
+    
+    <!-- Content Tabs -->
+    <div id="pestana-clientes" class="pestana-contenido">
+      <!-- Client Management Panel -->
+      <div class="enterprise-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <div>
+            <div class="card-title">Client Management</div>
+            <div class="card-subtitle">Add and manage PtMP client connections</div>
+          </div>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="idCliente" class="form-label">Client ID</label>
+            <input type="text" id="idCliente" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="nombreCliente" class="form-label">Client Name</label>
+            <input type="text" id="nombreCliente" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="latCliente" class="form-label">Client Latitude</label>
+            <input type="text" id="latCliente" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="lonCliente" class="form-label">Client Longitude</label>
+            <input type="text" id="lonCliente" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="alturaCliente" class="form-label">Client Height (m)</label>
+            <input type="text" id="alturaCliente" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="tipoCliente" class="form-label">Client Tower Type</label>
+            <input type="text" id="tipoCliente" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="transporteCliente" class="form-label">Client Transport</label>
+            <input type="text" id="transporteCliente" class="form-control" />
+          </div>
+        </div>
+        
+        <div class="action-bar">
+          <button class="btn btn-primary" onclick="agregarCliente()">
+            <i class="fas fa-plus"></i> Add Client
+          </button>
+        </div>
+      </div>
+
+      <!-- Registered Clients Table -->
+      <div class="enterprise-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div>
+            <div class="card-title">Registered Clients</div>
+            <div class="card-subtitle">Overview of all connected PtMP clients</div>
+          </div>
+        </div>
+        
+        <div class="enterprise-table">
+          <div class="table-header">
+            <i class="fas fa-table"></i> Client Database
+          </div>
+          <div class="table-container">
+            <table id="tablaClientes">
+              <thead>
+                <tr>
+                  <th>Client ID</th>
+                  <th>Name</th>
+                  <th>Latitude</th>
+                  <th>Longitude</th>
+                  <th>Height</th>
+                  <th>Tower Type</th>
+                  <th>Transport</th>
+                  <th>Distance (km)</th>
+                  <th>Feasibility</th>
+                  <th>Action</th>
+                  <th>Report</th>
+                </tr>
+              </thead>
+              <tbody id="tablaClientesBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Microwave Analysis Panel -->
+      <div class="analysis-panel">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fas fa-satellite-dish"></i>
+          </div>
+          <div>
+            <div class="card-title">Specialized PtMP Microwave Analysis</div>
+            <div class="card-subtitle">Professional-grade link analysis using ITU-R standards</div>
+          </div>
+        </div>
+        
+        <!-- Analysis Configuration -->
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="clima-ptmp" class="form-label">Climate</label>
+            <select id="clima-ptmp" class="form-control">
+              <option value="tropical">Tropical</option>
+              <option value="temperate" selected>Temperate</option>
+              <option value="arid">Arid</option>
+              <option value="cold">Cold</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="potencia-tx-ptmp" class="form-label">Base TX Power (dBm)</label>
+            <input type="number" id="potencia-tx-ptmp" class="form-control" value="25" min="0" max="50">
+          </div>
+          <div class="form-group">
+            <label for="sensibilidad-rx-ptmp" class="form-label">Client RX Sensitivity (dBm)</label>
+            <input type="number" id="sensibilidad-rx-ptmp" class="form-control" value="-85" min="-120" max="-50">
+          </div>
+          <div class="form-group">
+            <label for="disponibilidad-objetivo-ptmp" class="form-label">Target Availability (%)</label>
+            <input type="number" id="disponibilidad-objetivo-ptmp" class="form-control" value="99.5" min="99" max="99.999" step="0.001">
+          </div>
+        </div>
+        
+        <div class="action-bar">
+          <button class="btn btn-primary" onclick="analizarMicroondasPtMP()">
+            <i class="fas fa-play"></i> Analyze PtMP Microwave Links
+          </button>
+        </div>
+      
+        <!-- Analysis Results -->
+        <div id="resultados-microondas-ptmp" class="resultados-microondas" style="display: none;">
+          <div class="analysis-grid">
+            <div class="analysis-card">
+              <div class="analysis-number" id="enlaces-viables-ptmp">0</div>
+              <div class="analysis-label">Viable Links</div>
+            </div>
+            <div class="analysis-card">
+              <div class="analysis-number" id="enlaces-criticos-ptmp">0</div>
+              <div class="analysis-label">Critical Links</div>
+            </div>
+            <div class="analysis-card">
+              <div class="analysis-number" id="disponibilidad-promedio-ptmp">0%</div>
+              <div class="analysis-label">Average Availability</div>
+            </div>
+            <div class="analysis-card">
+              <div class="analysis-number" id="clientes-activos-ptmp">0</div>
+              <div class="analysis-label">Active Clients</div>
+            </div>
+          </div>
+          
+          <!-- Detailed Analysis Table -->
+          <div class="enterprise-table">
+            <div class="table-header">
+              <i class="fas fa-chart-bar"></i> Detailed Analysis by Client
+            </div>
+            <div class="table-container">
+              <table id="tabla-analisis-ptmp">
+                <thead>
+                  <tr>
+                    <th>Client</th>
+                    <th>Distance (km)</th>
+                    <th>Frequency (GHz)</th>
+                    <th>Path Loss (dB)</th>
+                    <th>Margin (dB)</th>
+                    <th>Availability (%)</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-analisis-ptmp">
+                  <!-- Data will be loaded dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Visualization Tab -->
+    <div id="pestana-mapa" class="pestana-contenido" style="display: none;">
+      <div class="map-container">
+        <div class="map-header">
+          <i class="fas fa-map"></i> Network Topology Visualization
+        </div>
+        <div id="ptmp-mapa"></div>
+      </div>
+    </div>
+
+    <!-- Analysis Tab -->
+    <div id="pestana-analisis" class="pestana-contenido" style="display: none;">
+      <div class="enterprise-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div>
+            <div class="card-title">Technical Analysis Dashboard</div>
+            <div class="card-subtitle">Comprehensive PtMP network performance metrics</div>
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <p class="text-secondary">Select a client from the Client Management tab to view detailed technical analysis.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Panel for Elevation Profile -->
+  <div id="ptmp-bottom-panel" class="ptmp-bottom-panel" style="display:none; position:fixed;">
+    <button id="cerrar-panel-ptmp" title="Close" style="
+      position:absolute;top:12px;right:16px;
+      background:transparent;border:none;
+      font-size:1.8rem;line-height:1;
+      color:#00e6ff;cursor:pointer;
+      z-index:10;transition:color 0.2s;">
+      &times;
+    </button>
+    <div class="ptmp-bottom-flex">
+      <div class="ptmp-bottom-icons">
+        <div>
+          <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.29.0/icons/navigation.svg" width="32" style="filter:invert(60%)" alt="Azimuth"/>
+          <div class="ptmp-bottom-label">Azimuth</div>
+          <div class="ptmp-bottom-value" id="azimuth-value">--</div>
+        </div>
+        <div>
+          <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.29.0/icons/activity.svg" width="32" style="filter:invert(60%)" alt="Elevation"/>
+          <div class="ptmp-bottom-label">Elevation</div>
+          <div class="ptmp-bottom-value" id="elevacion-value">--</div>
+        </div>
+        <div>
+          <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.29.0/icons/arrow-up.svg" width="32" style="filter:invert(60%)" alt="Base Height"/>
+          <div class="ptmp-bottom-label">Base Height</div>
+          <div class="ptmp-bottom-value" id="altura-base-value">--</div>
+        </div>
+        <div>
+          <img src="https://cdn.jsdelivr.net/gh/feathericons/feather@4.29.0/icons/arrow-down.svg" width="32" style="filter:invert(60%)" alt="Client Height"/>
+          <div class="ptmp-bottom-label">Client Height</div>
+          <div class="ptmp-bottom-value" id="altura-cliente-value">--</div>
+        </div>
+      </div>
+      <div class="ptmp-bottom-profile">
+        <div id="perfilElevacionPlotly" style="width:800px;height:320px;border-radius:14px;overflow:hidden;box-shadow:0 2px 16px #00e6ff33;max-width:90vw;"></div>
+        <div style="display:flex;gap:32px;justify-content:center;margin:12px 0 0 0;">
+          <div>
+            <label style="color:#b2ebf2;font-size:0.95rem;">Base Height</label>
+            <input type="range" id="sliderAlturaA" min="1" max="120" value="10" style="width:120px;">
+            <span id="sliderAlturaAValue" style="color:#00e6ff;font-weight:700;">10 m</span>
+          </div>
+          <div>
+            <label style="color:#b2ebf2;font-size:0.95rem;">Client Height</label>
+            <input type="range" id="sliderAlturaB" min="1" max="120" value="10" style="width:120px;">
+            <span id="sliderAlturaBValue" style="color:#00e6ff;font-weight:700;">10 m</span>
+          </div>
+        </div>
+        <div class="ptmp-bottom-pathinfo" id="ptmp-bottom-pathinfo">Path profile: --</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div id="modalResultadosPtMP" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(8,20,33,0.92); z-index:99999; align-items:center; justify-content:center;">
+    <div style="background:#181f2a; border-radius:18px; max-width:900px; width:96vw; margin:40px auto; box-shadow:0 8px 48px #00e6ff99; padding:32px 24px 24px 24px; position:relative;">
+      <button onclick="cerrarModalResultadosPtMP()" style="position:absolute;top:16px;right:18px;font-size:2rem;background:transparent;border:none;color:#00e6ff;cursor:pointer;">&times;</button>
+      <div style="display:flex; gap:32px; justify-content:space-between; align-items:flex-start;">
+        <div style="flex:1;">
+          <h3 style="color:#00e6ff; margin-bottom:8px;">Base Station</h3>
+          <div id="modalBaseInfo"></div>
+        </div>
+        <div style="flex:1;">
+          <h3 style="color:#10b981; margin-bottom:8px;">Client</h3>
+          <div id="modalClienteInfo"></div>
+        </div>
+      </div>
+      <hr style="margin:24px 0;">
+      <div id="modalResultadosTabla"></div>
+    </div>
+  </div> 
+
+  <div id="modalReporteDetallado" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(8,20,33,0.92); z-index:99999; align-items:center; justify-content:center;">
+    <div style="background:#181f2a; border-radius:18px; max-width:900px; width:96vw; margin:40px auto; box-shadow:0 8px 48px #b4ec51aa; padding:32px 24px 24px 24px; position:relative;">
+      <button onclick="cerrarModalReporteDetallado()" style="position:absolute;top:16px;right:18px;font-size:2rem;background:transparent;border:none;color:#b4ec51;cursor:pointer;">&times;</button>
+      <div id="contenidoReporteDetallado"></div>
+    </div>
+  </div>
+
+  <script>
+// ... existing code ...
+</script>
+
+</body>
+</html>

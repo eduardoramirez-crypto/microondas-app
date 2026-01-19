@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FANGIO TELECOM | Gestión de Archivos Permanentes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+            --border-color: #e5e7eb;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header mejorado */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--success-color), var(--info-color));
+            border-radius: 2px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Panel de búsqueda mejorado */
+        .search-panel {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .search-panel h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-panel h3 i {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input, .form-group select {
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            font-weight: 500;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .search-button {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .search-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .search-button:active {
+            transform: translateY(-1px);
+        }
+
+        .clear-button {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .clear-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .clear-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Panel de resultados mejorado */
+        .results-panel {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .results-count {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .results-count i {
+            font-size: 1.4rem;
+        }
+
+        .refresh-button {
+            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .refresh-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Tabla mejorada */
+        .files-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .files-table th {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            font-weight: 700;
+            padding: 20px 15px;
+            text-align: left;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .files-table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .files-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .files-table tr:hover {
+            background-color: rgba(102, 126, 234, 0.05);
+            transform: scale(1.01);
+            transition: all 0.2s ease;
+        }
+
+        /* Badges mejorados */
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .status-diseno_solucion {
+            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .status-ptp {
+            background: linear-gradient(135deg, var(--info-color) 0%, #1d4ed8 100%);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .status-ptmp {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Botones de acción mejorados */
+        .file-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            min-width: 80px;
+            justify-content: center;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+            color: white;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .info-btn {
+            background: linear-gradient(135deg, var(--info-color) 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .info-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Estados mejorados */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            color: var(--border-color);
+            margin-bottom: 25px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-secondary);
+        }
+
+        .loading i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            animation: spin 1.5s linear infinite;
+        }
+
+        .loading p {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Información del archivo */
+        .file-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .file-path {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-family: 'Monaco', 'Menlo', monospace;
+            word-break: break-all;
+        }
+
+        .file-size {
+            font-family: 'Monaco', 'Menlo', monospace;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .file-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Responsive design mejorado */
+        @media (max-width: 1024px) {
+            .search-form {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+
+            .files-table {
+                font-size: 0.9rem;
+            }
+
+            .files-table th,
+            .files-table td {
+                padding: 12px 8px;
+            }
+
+            .file-actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .search-panel,
+            .results-panel {
+                padding: 20px;
+            }
+
+            .files-table {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Animaciones adicionales */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Tooltip personalizado */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark-color);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-bottom: 5px;
+        }
+
+        .tooltip:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: var(--dark-color);
+            margin-bottom: -5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header fade-in">
+            <h1><i class="fas fa-archive"></i> Gestión de Archivos Permanentes</h1>
+            <p>Sistema avanzado de almacenamiento y gestión de archivos de FANGIO TELECOM</p>
+        </div>
+
+        <div class="search-panel slide-in">
+            <h3><i class="fas fa-search"></i> Búsqueda y Filtros Avanzados</h3>
+            <form class="search-form" id="searchForm">
+                <div class="form-group">
+                    <label for="user_id">ID de Usuario</label>
+                    <input type="text" id="user_id" name="user_id" placeholder="Ej: 3100321513R">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tipo">Tipo de Archivo</label>
+                    <select id="tipo" name="tipo">
+                        <option value="">Todos los tipos</option>
+                        <option value="diseno_solucion">Diseño de Solución</option>
+                        <option value="ptp">PtP</option>
+                        <option value="ptmp">PtMP</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fecha_inicio">Fecha Inicio</label>
+                    <input type="date" id="fecha_inicio" name="fecha_inicio">
+                </div>
+                
+                <div class="form-group">
+                    <label for="fecha_fin">Fecha Fin</label>
+                    <input type="date" id="fecha_fin" name="fecha_fin">
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-search"></i> Buscar Archivos
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <button type="button" class="clear-button" onclick="limpiarFiltros()">
+                        <i class="fas fa-times"></i> Limpiar Filtros
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="results-panel slide-in">
+            <div class="results-header">
+                <div class="results-count" id="resultsCount">
+                    <i class="fas fa-folder-open"></i> Archivos Permanentes
+                </div>
+                <button class="refresh-button" onclick="cargarArchivos()">
+                    <i class="fas fa-sync-alt"></i> Actualizar Lista
+                </button>
+            </div>
+
+            <div id="filesContent">
+                <div class="loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>Cargando archivos permanentes...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cargar archivos al iniciar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarArchivos();
+            inicializarFechas();
+        });
+
+        // Inicializar fechas por defecto
+        function inicializarFechas() {
+            const hoy = new Date();
+            const haceUnMes = new Date();
+            haceUnMes.setMonth(haceUnMes.getMonth() - 1);
+            
+            document.getElementById('fecha_inicio').value = haceUnMes.toISOString().split('T')[0];
+            document.getElementById('fecha_fin').value = hoy.toISOString().split('T')[0];
+        }
+
+        // Manejar formulario de búsqueda
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const params = new URLSearchParams();
+            
+            for (let [key, value] of formData.entries()) {
+                if (value) {
+                    params.append(key, value);
+                }
+            }
+            
+            buscarArchivos(params);
+        });
+
+        // Función para cargar todos los archivos
+        function cargarArchivos() {
+            const content = document.getElementById('filesContent');
+            content.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Cargando archivos...</p></div>';
+            
+            fetch('/listar_archivos_permanentes')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        mostrarArchivos(data.archivos);
+                        actualizarContador(data.total);
+                    } else {
+                        mostrarError(data.error || 'Error al cargar archivos');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    mostrarError('Error de conexión al servidor');
+                });
+        }
+
+        // Función para buscar archivos con filtros
+        function buscarArchivos(params) {
+            const content = document.getElementById('filesContent');
+            content.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Buscando archivos...</p></div>';
+            
+            fetch(`/buscar_archivos_permanentes?${params}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        mostrarArchivos(data.archivos);
+                        actualizarContador(data.total);
+                    } else {
+                        mostrarError(data.error || 'Error en la búsqueda');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    mostrarError('Error de conexión al servidor');
+                });
+        }
+
+        // Función para mostrar archivos en la tabla
+        function mostrarArchivos(archivos) {
+            const content = document.getElementById('filesContent');
+            
+            if (archivos.length === 0) {
+                content.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <h3>No se encontraron archivos</h3>
+                        <p>No hay archivos permanentes que coincidan con los criterios de búsqueda especificados.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let tableHTML = `
+                <table class="files-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Tipo</th>
+                            <th>Archivo</th>
+                            <th>Tamaño</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            archivos.forEach(archivo => {
+                const fecha = new Date(archivo.fecha_creacion).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const tamaño = formatearTamaño(archivo.tamaño_bytes);
+                const nombreArchivo = archivo.nombre_permanente;
+                const tipoClase = `status-${archivo.tipo.toLowerCase().replace(' ', '_')}`;
+
+                tableHTML += `
+                    <tr class="fade-in">
+                        <td><strong>${archivo.id}</strong></td>
+                        <td>${archivo.user_id}</td>
+                        <td><span class="status-badge ${tipoClase}">${archivo.tipo.toUpperCase()}</span></td>
+                        <td>
+                            <div class="file-info">
+                                <div class="file-name">${nombreArchivo}</div>
+                                <div class="file-path tooltip" data-tooltip="${archivo.archivo_permanente}">${archivo.archivo_permanente}</div>
+                            </div>
+                        </td>
+                        <td class="file-size">${tamaño}</td>
+                        <td class="file-date">${fecha}</td>
+                        <td class="file-actions">
+                            <button class="action-btn info-btn" onclick="mostrarInfoArchivo('${archivo.id}', '${archivo.nombre_permanente}')">
+                                <i class="fas fa-info-circle"></i> Info
+                            </button>
+                                                         <button class="action-btn download-btn" onclick="descargarArchivo('${archivo.id}', '${archivo.nombre_permanente}')">
+                                 <i class="fas fa-download"></i> Descargar
+                             </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += '</tbody></table>';
+            content.innerHTML = tableHTML;
+        }
+
+        // Función para formatear tamaño de archivo
+        function formatearTamaño(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Función para actualizar contador
+        function actualizarContador(total) {
+            const countElement = document.getElementById('resultsCount');
+            countElement.innerHTML = `<i class="fas fa-folder-open"></i> ${total} Archivo${total !== 1 ? 's' : ''} Permanente${total !== 1 ? 's' : ''}`;
+        }
+
+        // Función para mostrar información del archivo
+        function mostrarInfoArchivo(id, nombre) {
+            const info = `
+📁 Información del Archivo
+
+🆔 ID: ${id}
+📄 Nombre: ${nombre}
+📅 Fecha de Creación: ${new Date().toLocaleDateString('es-ES')}
+💾 Estado: Almacenado Permanente
+🔒 Seguridad: Archivo Protegido
+
+Esta funcionalidad se puede expandir para mostrar más detalles técnicos del archivo.
+            `;
+            alert(info);
+        }
+
+        // Función para descargar archivo
+        function descargarArchivo(archivoId, nombre) {
+            console.log('Iniciando descarga del archivo:', nombre);
+            
+            // Mostrar indicador de descarga
+            const button = event.target.closest('button');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Descargando...';
+            button.disabled = true;
+            
+            try {
+                // Crear enlace de descarga
+                const downloadLink = document.createElement('a');
+                downloadLink.href = `/descargar_archivo_permanente?id=${archivoId}`;
+                downloadLink.download = nombre;
+                downloadLink.style.display = 'none';
+                
+                // Agregar al DOM y hacer clic
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                
+                // Limpiar
+                document.body.removeChild(downloadLink);
+                
+                // Mostrar mensaje de éxito
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-check-circle"></i> Descargado';
+                    button.style.background = 'linear-gradient(135deg, var(--success-color) 0%, #059669 100%)';
+                    
+                    // Restaurar después de 2 segundos
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                        button.style.background = '';
+                    }, 2000);
+                }, 1000);
+                
+                console.log('✅ Descarga iniciada exitosamente');
+                
+            } catch (error) {
+                console.error('❌ Error en la descarga:', error);
+                
+                // Mostrar mensaje de error
+                button.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
+                button.style.background = 'linear-gradient(135deg, var(--danger-color) 0%, #dc2626 100%)';
+                
+                // Restaurar después de 3 segundos
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    button.style.background = '';
+                }, 3000);
+                
+                alert('❌ Error al descargar el archivo. Por favor, inténtalo de nuevo.');
+            }
+        }
+
+        // Función para mostrar errores
+        function mostrarError(mensaje) {
+            const content = document.getElementById('filesContent');
+            content.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Error en el Sistema</h3>
+                    <p>${mensaje}</p>
+                    <button class="search-button" onclick="cargarArchivos()" style="margin-top: 20px;">
+                        <i class="fas fa-redo"></i> Intentar de Nuevo
+                    </button>
+                </div>
+            `;
+        }
+
+        // Función para limpiar filtros
+        function limpiarFiltros() {
+            // Resetear formulario
+            document.getElementById('searchForm').reset();
+            
+            // Reinicializar fechas
+            inicializarFechas();
+            
+            // Mostrar mensaje de confirmación
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check"></i> Filtros Limpiados';
+            button.style.background = 'linear-gradient(135deg, var(--success-color) 0%, #059669 100%)';
+            
+            // Cargar todos los archivos
+            cargarArchivos();
+            
+            // Restaurar botón después de 2 segundos
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.background = '';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

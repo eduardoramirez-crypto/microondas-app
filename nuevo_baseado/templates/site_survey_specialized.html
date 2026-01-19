@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Survey Especializado - Fangio Telecom</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+        }
+        .feature-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .survey-form {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-processing { background-color: #ffc107; }
+        .status-completed { background-color: #28a745; }
+        .status-error { background-color: #dc3545; }
+        .priority-badge {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.6rem;
+        }
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .progress-ring .progress-bg {
+            stroke: #e9ecef;
+        }
+        .progress-ring .progress-fill {
+            stroke: #007bff;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">
+                        🚀 Site Survey Especializado
+                    </h1>
+                    <p class="lead mb-4">
+                        Procesamiento ultra-rápido con 32 workers paralelos para Site Survey PTP, PTMP, WiFi, Fibra e Híbrido
+                    </p>
+                    <div class="d-flex gap-3">
+                        <span class="badge bg-light text-dark fs-6">
+                            <i class="fas fa-microchip"></i> 32 Workers
+                        </span>
+                        <span class="badge bg-light text-dark fs-6">
+                            <i class="fas fa-bolt"></i> 15-25x Más Rápido
+                        </span>
+                        <span class="badge bg-light text-dark fs-6">
+                            <i class="fas fa-sync"></i> 100% Paralelo
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="progress-ring">
+                        <svg viewBox="0 0 120 120">
+                            <circle class="progress-bg" cx="60" cy="60" r="45"></circle>
+                            <circle class="progress-fill" cx="60" cy="60" r="45" 
+                                    style="stroke-dashoffset: 70;"></circle>
+                        </svg>
+                        <div class="position-absolute top-50 start-50 translate-middle">
+                            <i class="fas fa-rocket fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container my-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-satellite-dish fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">PTP - Point to Point</h5>
+                        <p class="card-text">Antenas, radios, cálculos de pérdida, zona de Fresnel y línea de vista</p>
+                        <span class="badge bg-success">Prioridad Alta</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-broadcast-tower fa-3x text-warning mb-3"></i>
+                        <h5 class="card-title">PTMP - Point to Multipoint</h5>
+                        <p class="card-text">Cobertura, capacidad, interferencias y planificación de sectores</p>
+                        <span class="badge bg-warning">Prioridad Media</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-wifi fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">WiFi</h5>
+                        <p class="card-text">Access Points, canales, seguridad, cobertura y roaming</p>
+                        <span class="badge bg-info">Prioridad Media</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-fiber fa-3x text-danger mb-3"></i>
+                        <h5 class="card-title">Fibra Óptica</h5>
+                        <p class="card-text">Rutas, empalmes, pruebas, permisos y documentación</p>
+                        <span class="badge bg-danger">Prioridad Alta</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-link fa-3x text-secondary mb-3"></i>
+                        <h5 class="card-title">Híbrido</h5>
+                        <p class="card-text">Integración multi-tecnología, redundancia y migración</p>
+                        <span class="badge bg-secondary">Prioridad Máxima</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Análisis Avanzado</h5>
+                        <p class="card-text">IA, machine learning y optimización automática</p>
+                        <span class="badge bg-primary">IA Activada</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Site Survey Form -->
+    <div class="container">
+        <div class="survey-form">
+            <h3 class="text-center mb-4">
+                <i class="fas fa-clipboard-list"></i> Nuevo Site Survey Especializado
+            </h3>
+            
+            <form id="siteSurveyForm">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="surveyType" class="form-label">
+                            <i class="fas fa-tag"></i> Tipo de Site Survey
+                        </label>
+                        <select class="form-select" id="surveyType" name="surveyType" required>
+                            <option value="">Seleccionar tipo...</option>
+                            <option value="ptp">PTP - Point to Point</option>
+                            <option value="ptmp">PTMP - Point to Multipoint</option>
+                            <option value="wifi">WiFi</option>
+                            <option value="fiber">Fibra Óptica</option>
+                            <option value="hybrid">Híbrido</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="priority" class="form-label">
+                            <i class="fas fa-flag"></i> Prioridad
+                        </label>
+                        <select class="form-select" id="priority" name="priority" required>
+                            <option value="">Seleccionar prioridad...</option>
+                            <option value="1">🚨 Crítica (Máxima prioridad)</option>
+                            <option value="2">🔴 Alta</option>
+                            <option value="3">🟡 Normal</option>
+                            <option value="4">🟢 Baja</option>
+                            <option value="5">⚪ Fondo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="location" class="form-label">
+                            <i class="fas fa-map-marker-alt"></i> Ubicación
+                        </label>
+                        <input type="text" class="form-control" id="location" name="location" 
+                               placeholder="Ciudad, Estado, País" required>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="latitude" class="form-label">
+                            <i class="fas fa-globe"></i> Latitud
+                        </label>
+                        <input type="number" class="form-control" id="latitude" name="latitude" 
+                               step="0.000001" placeholder="19.4326" required>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="longitude" class="form-label">
+                            <i class="fas fa-globe"></i> Longitud
+                        </label>
+                        <input type="number" class="form-control" id="longitude" name="longitude" 
+                               step="0.000001" placeholder="-99.1332" required>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="images" class="form-label">
+                            <i class="fas fa-images"></i> Imágenes del Site Survey
+                        </label>
+                        <input type="file" class="form-control" id="images" name="images" 
+                               multiple accept="image/*">
+                        <div class="form-text">Selecciona múltiples imágenes del sitio</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="estimatedDuration" class="form-label">
+                            <i class="fas fa-clock"></i> Duración Estimada (minutos)
+                        </label>
+                        <input type="number" class="form-control" id="estimatedDuration" 
+                               name="estimatedDuration" min="5" max="480" value="15">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="measurements" class="form-label">
+                            <i class="fas fa-ruler"></i> Mediciones Específicas
+                        </label>
+                        <input type="text" class="form-control" id="measurements" 
+                               name="measurements" placeholder="Distancia, frecuencia, etc.">
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="notes" class="form-label">
+                            <i class="fas fa-sticky-note"></i> Notas Adicionales
+                        </label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3" 
+                                  placeholder="Observaciones, requisitos especiales, etc."></textarea>
+                    </div>
+                    
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-rocket"></i> Enviar Site Survey Especializado
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Status Monitoring -->
+    <div class="container my-5">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-monitor"></i> Monitoreo en Tiempo Real
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>📊 Estadísticas del Sistema</h5>
+                        <div id="systemStats">
+                            <p><strong>Workers Activos:</strong> <span id="activeWorkers">32</span></p>
+                            <p><strong>Site Surveys Procesados:</strong> <span id="surveysProcessed">0</span></p>
+                            <p><strong>Tasa de Éxito:</strong> <span id="successRate">0%</span></p>
+                            <p><strong>Tiempo Promedio:</strong> <span id="avgTime">0s</span></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>🔄 Cola de Trabajos</h5>
+                        <div id="jobQueue">
+                            <p><strong>En Cola:</strong> <span id="queuedJobs">0</span></p>
+                            <p><strong>En Procesamiento:</strong> <span id="processingJobs">0</span></p>
+                            <p><strong>Completados:</strong> <span id="completedJobs">0</span></p>
+                            <p><strong>Con Errores:</strong> <span id="errorJobs">0</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <button class="btn btn-outline-primary me-2" onclick="refreshStats()">
+                        <i class="fas fa-sync"></i> Actualizar Estadísticas
+                    </button>
+                    <button class="btn btn-outline-success me-2" onclick="clearCache()">
+                        <i class="fas fa-broom"></i> Limpiar Caché
+                    </button>
+                    <button class="btn btn-outline-warning me-2" onclick="restartProcessors()">
+                        <i class="fas fa-redo"></i> Reiniciar Procesadores
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Surveys -->
+    <div class="container my-5">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-history"></i> Site Surveys Recientes
+                </h4>
+            </div>
+            <div class="card-body">
+                <div id="recentSurveys">
+                    <p class="text-muted text-center">No hay Site Surveys recientes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p class="mb-0">
+                <i class="fas fa-rocket"></i> Fangio Telecom - Site Survey Especializado
+                <span class="badge bg-primary ms-2">v2.0</span>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Variables globales
+        let currentSurveyId = null;
+        let statusCheckInterval = null;
+
+        // Inicializar formulario
+        document.getElementById('siteSurveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitSiteSurvey();
+        });
+
+        // Enviar Site Survey
+        async function submitSiteSurvey() {
+            const formData = new FormData(document.getElementById('siteSurveyForm'));
+            
+            // Preparar datos
+            const surveyData = {
+                survey_type: formData.get('surveyType'),
+                priority: parseInt(formData.get('priority')),
+                location: formData.get('location'),
+                coordinates: [
+                    parseFloat(formData.get('latitude')),
+                    parseFloat(formData.get('longitude'))
+                ],
+                images: [], // Por ahora vacío, se puede implementar subida de archivos
+                measurements: formData.get('measurements') ? 
+                    { measurements: formData.get('measurements') } : {},
+                notes: formData.get('notes'),
+                estimated_duration: parseFloat(formData.get('estimatedDuration'))
+            };
+
+            try {
+                const response = await fetch('/submit_site_survey', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(surveyData)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    currentSurveyId = result.survey_id;
+                    showAlert('✅ Site Survey enviado exitosamente', 'success');
+                    
+                    // Iniciar monitoreo de estado
+                    startStatusMonitoring(currentSurveyId);
+                    
+                    // Limpiar formulario
+                    document.getElementById('siteSurveyForm').reset();
+                    
+                    // Actualizar estadísticas
+                    refreshStats();
+                    
+                } else {
+                    showAlert(`❌ Error: ${result.error}`, 'danger');
+                }
+                
+            } catch (error) {
+                showAlert(`❌ Error de conexión: ${error.message}`, 'danger');
+            }
+        }
+
+        // Monitorear estado del Site Survey
+        function startStatusMonitoring(surveyId) {
+            if (statusCheckInterval) {
+                clearInterval(statusCheckInterval);
+            }
+            
+            statusCheckInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(`/get_survey_status/${surveyId}`);
+                    const result = await response.json();
+                    
+                    if (result.success && result.status !== 'processing') {
+                        clearInterval(statusCheckInterval);
+                        showSurveyResult(result.status);
+                        refreshStats();
+                    }
+                    
+                } catch (error) {
+                    console.error('Error monitoreando estado:', error);
+                }
+            }, 2000); // Verificar cada 2 segundos
+        }
+
+        // Mostrar resultado del Site Survey
+        function showSurveyResult(status) {
+            const resultHtml = `
+                <div class="alert alert-${status.success ? 'success' : 'danger'}">
+                    <h5><i class="fas fa-${status.success ? 'check-circle' : 'exclamation-triangle'}"></i> 
+                        Site Survey ${status.success ? 'Completado' : 'Con Errores'}
+                    </h5>
+                    <p><strong>ID:</strong> ${status.survey_id}</p>
+                    <p><strong>Tiempo de Procesamiento:</strong> ${status.processing_time.toFixed(2)}s</p>
+                    <p><strong>Score de Calidad:</strong> ${status.quality_score.toFixed(1)}/100</p>
+                    ${status.output_files.length > 0 ? 
+                        `<p><strong>Archivos Generados:</strong> ${status.output_files.length}</p>` : ''}
+                    ${status.errors.length > 0 ? 
+                        `<p><strong>Errores:</strong> ${status.errors.join(', ')}</p>` : ''}
+                    ${status.warnings.length > 0 ? 
+                        `<p><strong>Advertencias:</strong> ${status.warnings.join(', ')}</p>` : ''}
+                </div>
+            `;
+            
+            // Agregar a la lista de surveys recientes
+            const recentSurveys = document.getElementById('recentSurveys');
+            if (recentSurveys.querySelector('.text-muted')) {
+                recentSurveys.innerHTML = '';
+            }
+            recentSurveys.insertAdjacentHTML('afterbegin', resultHtml);
+        }
+
+        // Actualizar estadísticas
+        async function refreshStats() {
+            try {
+                const response = await fetch('/performance_metrics');
+                const metrics = await response.json();
+                
+                if (metrics.site_survey && typeof metrics.site_survey === 'object') {
+                    document.getElementById('surveysProcessed').textContent = 
+                        metrics.site_survey.surveys_processed || 0;
+                    document.getElementById('successRate').textContent = 
+                        `${((metrics.site_survey.success_rate || 0) * 100).toFixed(1)}%`;
+                    document.getElementById('avgTime').textContent = 
+                        `${(metrics.site_survey.average_processing_time || 0).toFixed(2)}s`;
+                }
+                
+            } catch (error) {
+                console.error('Error actualizando estadísticas:', error);
+            }
+        }
+
+        // Limpiar caché
+        async function clearCache() {
+            try {
+                const response = await fetch('/clear_cache');
+                if (response.ok) {
+                    showAlert('✅ Caché limpiado exitosamente', 'success');
+                    refreshStats();
+                }
+            } catch (error) {
+                showAlert('❌ Error limpiando caché', 'danger');
+            }
+        }
+
+        // Reiniciar procesadores
+        async function restartProcessors() {
+            try {
+                const response = await fetch('/restart_specialized');
+                if (response.ok) {
+                    showAlert('🔄 Procesadores reiniciados', 'success');
+                    refreshStats();
+                }
+            } catch (error) {
+                showAlert('❌ Error reiniciando procesadores', 'danger');
+            }
+        }
+
+        // Mostrar alertas
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.querySelector('.survey-form').insertAdjacentElement('beforebegin', alertDiv);
+            
+            // Auto-dismiss después de 5 segundos
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshStats();
+            
+            // Actualizar estadísticas cada 10 segundos
+            setInterval(refreshStats, 10000);
+        });
+    </script>
+</body>
+</html> 

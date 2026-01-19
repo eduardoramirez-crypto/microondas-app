@@ -1,0 +1,14 @@
+{
+    "include": [
+        "."
+    ],
+    "exclude": [
+        "**/node_modules",
+        "**/__pycache__"
+    ],
+    "reportUndefinedVariable": "none",
+    "reportMissingImports": "warning",
+    "reportMissingTypeStubs": "none",
+    "pythonVersion": "3.8",
+    "typeCheckingMode": "basic"
+} 

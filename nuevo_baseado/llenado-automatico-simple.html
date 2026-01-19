@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Llenado Automático - Versión Simple</title>
+  <style>
+    body { 
+      background: #0a192f; 
+      color: #e0e7ef; 
+      font-family: Arial, sans-serif; 
+      margin: 0; 
+      padding: 20px;
+    }
+    .container { 
+      max-width: 600px; 
+      margin: 40px auto; 
+      background: rgba(22, 33, 62, 0.95); 
+      border-radius: 20px; 
+      padding: 40px; 
+      border: 2px solid rgba(0, 195, 255, 0.1);
+    }
+    h1 { 
+      color: #00c3ff; 
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #00c3ff;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #00c3ff;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.1);
+      color: #e0e7ef;
+    }
+    button {
+      background: #00c3ff;
+      color: #0a192f;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #0099cc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>FANGIO TELECOM</h1>
+    <h2 style="text-align: center; color: #00c3ff;">Llenado Automático - Versión Simple</h2>
+    
+    <form id="autoForm" action="/procesar" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="user_id">ID del Sitio:</label>
+        <input type="text" id="user_id" name="user_id" required placeholder="Ingresa el ID del sitio">
+      </div>
+      
+      <div class="form-group">
+        <label for="tipo">Tipo de Documento:</label>
+        <select id="tipo" name="tipo" required>
+          <option value="">Selecciona el tipo</option>
+          <option value="site_survey">Site Survey</option>
+          <option value="diseno_solucion">Diseño de Solución</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="template_path">Ruta de la Plantilla:</label>
+        <input type="text" id="template_path" name="template_path" value="static/plantillas/llenadoauto.xlsx" readonly>
+      </div>
+      
+      <div class="form-group">
+        <label for="observaciones">Observaciones:</label>
+        <textarea id="observaciones" name="observaciones" rows="4" placeholder="Observaciones adicionales"></textarea>
+      </div>
+      
+      <div style="text-align: center;">
+        <button type="submit">Procesar Llenado Automático</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html> 

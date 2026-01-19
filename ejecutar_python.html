@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Survey App - Fangio Telecom</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Efectos de partículas */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(59, 130, 246, 0.6);
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+            border-radius: 25px 25px 0 0;
+        }
+        
+        .logo {
+            font-size: 60px;
+            color: #3b82f6;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+        }
+        
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #94a3b8;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .status {
+            background: rgba(59, 130, 246, 0.1);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .status i {
+            font-size: 24px;
+            color: #3b82f6;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 12px 35px rgba(107, 114, 128, 0.4);
+        }
+        
+        .info {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #10b981;
+        }
+        
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .back-btn:hover {
+            background: rgba(239, 68, 68, 1);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <button class="back-btn" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+    
+    <div class="container">
+        <div class="logo">
+            <i class="fab fa-python"></i>
+        </div>
+        
+        <h1>Site Survey App</h1>
+        <p class="subtitle">Aplicación Python para análisis de sitios</p>
+        
+        <div class="status">
+            <i class="fas fa-server"></i>
+            <span>Servidor Python Listo</span>
+        </div>
+        
+        <div class="info">
+            <i class="fas fa-info-circle"></i>
+            Esta aplicación se ejecutará en el puerto 5000
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Iniciando aplicación...</p>
+        </div>
+        
+        <div>
+            <button class="btn" onclick="ejecutarApp()">
+                <i class="fas fa-play"></i>
+                Ejecutar Aplicación
+            </button>
+            
+            <button class="btn btn-secondary" onclick="ejecutarBatch()">
+                <i class="fas fa-terminal"></i>
+                Ejecutar Batch
+            </button>
+            
+            <button class="btn btn-secondary" onclick="abrirDirectorio()">
+                <i class="fas fa-folder-open"></i>
+                Abrir Directorio
+            </button>
+        </div>
+        
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <p style="color: #64748b; font-size: 12px;">
+                <i class="fas fa-code"></i>
+                Desarrollado con Python, Flask y tecnologías web
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Crear partículas
+        function crearParticulas() {
+            const particlesContainer = document.getElementById('particles');
+            const numParticles = 30;
+            
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Ejecutar aplicación Python
+        function ejecutarApp() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+            
+            // Simular carga
+            setTimeout(() => {
+                // Intentar abrir la aplicación Python
+                window.open('http://127.0.0.1:5000', '_blank');
+                
+                // También abrir el archivo run_app.py
+                window.open('nuevo_baseado/run_app.py', '_blank');
+                
+                loading.style.display = 'none';
+                
+                // Mostrar mensaje de éxito
+                mostrarMensaje('✅ Aplicación iniciada correctamente', 'success');
+            }, 2000);
+        }
+        
+        // Abrir directorio del proyecto
+        function abrirDirectorio() {
+            window.open('nuevo_baseado/', '_blank');
+        }
+        
+        // Ejecutar archivo batch
+        function ejecutarBatch() {
+            window.open('ejecutar_site_survey.bat', '_blank');
+            mostrarMensaje('🚀 Ejecutando archivo batch...', 'success');
+        }
+        
+        // Mostrar mensaje
+        function mostrarMensaje(texto, tipo) {
+            const mensaje = document.createElement('div');
+            mensaje.textContent = texto;
+            mensaje.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${tipo === 'success' ? '#10b981' : '#ef4444'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                z-index: 1000;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(mensaje);
+            
+            setTimeout(() => {
+                mensaje.remove();
+            }, 3000);
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            crearParticulas();
+            console.log('🚀 Site Survey App - Interfaz de ejecución cargada');
+        });
+    </script>
+</body>
+</html> 

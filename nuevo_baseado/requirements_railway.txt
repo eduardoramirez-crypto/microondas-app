@@ -1,0 +1,24 @@
+# Requirements para despliegue en Railway/Render
+# Dependencias principales
+Flask==2.3.3
+pandas==2.0.3
+openpyxl==3.1.2
+python-docx==0.8.11
+matplotlib==3.7.2
+numpy==1.24.3
+requests==2.31.0
+Werkzeug==2.3.7
+Jinja2==3.1.2
+dataframe-image==0.2.1
+Pillow==10.0.0
+psutil==5.9.5
+
+# Servidor web para producción
+gunicorn==21.2.0
+waitress==2.1.2
+
+# Dependencias adicionales para funcionalidad completa
+Jinja2==3.1.2
+itsdangerous==2.1.2
+click==8.1.7
+MarkupSafe==2.1.3

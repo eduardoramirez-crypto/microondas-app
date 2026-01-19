@@ -1,0 +1,16 @@
+# Requirements mínimos para Fangio Telecom
+# Solo dependencias absolutamente esenciales
+
+# Dependencias base existentes
+Flask
+pandas
+xlwings
+pywin32
+dataframe-image
+matplotlib
+python-docx
+Werkzeug
+
+# Dependencias de optimización (opcionales)
+Pillow
+psutil 
